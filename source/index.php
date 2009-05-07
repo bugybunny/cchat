@@ -13,8 +13,19 @@
 <body>
 	<form id='form' action='ajax.php' method='post'>
 		<p>
-			<label for='text'>Text</label>: <input type='text' length='30' id='text' name='text'>
-			<input type='submit' value='senden'>
+			<label for='texttext'>Text</label>: <input type='text' length='30' id='texttext' name='texttext'>
+			<input id='textsenden' type='button' value='senden'>
+		</p>
+		<p>
+			<label for='loginname'>Login</label>: <input type='text' length='30' id='loginname' name='loginname'>
+			<label for='loginpwd'>Passwort</label>: <input type='text' length='30' id='loginpwd' name='loginpwd'>
+			<input id='loginsenden' type='button' value='login'> * Passwort in Klartext!
+		</p>
+		<p>
+			<label for='registername'>User</label>: <input type='text' length='30' id='registername' name='registername'>
+			<label for='registerpwd'>Passwort</label>: <input type='text' length='30' id='registerpwd' name='registerpwd'>
+			<label for='registermail'>Mail</label>: <input type='text' length='30' id='registermail' name='registermail'>
+			<input id='registersenden' type='button' value='register'> * Passwort in Klartext!
 		</p>
 		<p>
 			<label for='data'>Antwort</label>:<br>
@@ -22,7 +33,7 @@
 		</p>
 		
 		<p>
-			<input type='submit' id='aktualisieren' name='aktualisieren' value='aktualisieren'>
+			<input type='button' id='aktualisieren' value='aktualisieren'>
 		</p>
 	</form>
 </body>
