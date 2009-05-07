@@ -1,16 +1,15 @@
 document.addEvent('domready', function() {
 	var ajax = new Request.JSON({
 		'url': 'ajax.php',
-		'data': '{}',
-		'link': 'chain',
-		'noCache': true
+		'data': {'data': '{}'},
+		'link': 'chain'
 	});
 	ajax.addEvent('success', function(json, text) {
 		$('data').set('value', text);
 	});
 	$('form').addEvent('submit', function(event) {
 		event.stop();
-		var data = {
+		var data = JSON.encode({
 			"login": {
 				"name": "hans",
 				"password": "maier"
@@ -18,7 +17,7 @@ document.addEvent('domready', function() {
 			"messages": [
 				$('text').get('value')
 			]
-		};
-		ajax.send({'data': data});
+		});
+		ajax.send({'data': {'data': data}});
 	});
 });
