@@ -1,5 +1,5 @@
 <?php
-	require "config.inc.php";
+	require "../source/config.inc.php";
 	
 	echo "
 <!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Strict//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
@@ -7,7 +7,7 @@
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=UFT-8'>
 	<title>cchat $cchat_version</title>
-	<script type='text/javascript' src='javascript/mootools-core.js'></script>
+	<script type='text/javascript' src='../source/javascript/mootools-core.js'></script>
 	<script type='text/javascript' src='javascript/script.js'></script>
 </head>
 <body>
@@ -38,4 +38,3 @@
 	</form>
 </body>
 </html>";
-?>

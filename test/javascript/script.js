@@ -1,6 +1,6 @@
 document.addEvent('domready', function() {
 	var ajax = new Request.JSON({
-		'url': 'ajax.php',
+		'url': '../source/ajax.php',
 		'data': {'data': '{}'},
 		'link': 'chain'
 	});
