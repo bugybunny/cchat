@@ -7,10 +7,8 @@ document.addEvent('domready', function() {
 	ajax.addEvent('success', function(json, text) {
 		$('data').set('value', text);
 	});
-	$('form').addEvent('submit', function(event) {
-		event.stop();
-	});
-	$('textsenden').addEvent('click', function() {
+	$('text').addEvent('submit', function(e) {
+		e.stop();
 		var data = JSON.encode({
 			"messages": [
 				$('texttext').get('value')
@@ -19,7 +17,8 @@ document.addEvent('domready', function() {
 		ajax.send({'data': {'data': data}});
 		$('texttext').set('value', '');
 	});
-	$('loginsenden').addEvent('click', function() {
+	$('login').addEvent('submit', function(e) {
+		e.stop();
 		var data = JSON.encode({
 			"login": {
 				"name": $('loginname').get('value'),
@@ -30,7 +29,8 @@ document.addEvent('domready', function() {
 		$('loginname').set('value', '');
 		$('loginpwd').set('value', '');
 	});
-	$('registersenden').addEvent('click', function() {
+	$('register').addEvent('submit', function(e) {
+		e.stop();
 		var data = JSON.encode({
 			"register": {
 				"name": $('registername').get('value'),
@@ -43,7 +43,8 @@ document.addEvent('domready', function() {
 		$('registerpwd').set('value', '');
 		$('registermail').set('value', '');
 	});
-	$('aktualisieren').addEvent('click', function() {
+	$('answer').addEvent('submit', function(e) {
+		e.stop();
 		ajax.send();
 	});
 });

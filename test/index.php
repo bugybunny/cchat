@@ -11,29 +11,35 @@
 	<script type='text/javascript' src='javascript/script.js'></script>
 </head>
 <body>
-	<form id='form' action='ajax.php' method='post'>
+	<form id='text' action='ajax.php' method='post'>
 		<p>
 			<label for='texttext'>Text</label>: <input type='text' length='30' id='texttext' name='texttext'>
-			<input id='textsenden' type='button' value='senden'>
+			<input type='submit' value='senden'>
 		</p>
+	</form>
+	<form id='login' action='ajax.php' method='post'>
 		<p>
 			<label for='loginname'>Login</label>: <input type='text' length='30' id='loginname' name='loginname'>
 			<label for='loginpwd'>Passwort</label>: <input type='text' length='30' id='loginpwd' name='loginpwd'>
-			<input id='loginsenden' type='button' value='login'> * Passwort in Klartext!
+			<input type='submit' value='login'> * Passwort in Klartext!
 		</p>
+	</form>
+	<form id='register' action='ajax.php' method='post'>
 		<p>
 			<label for='registername'>User</label>: <input type='text' length='30' id='registername' name='registername'>
 			<label for='registerpwd'>Passwort</label>: <input type='text' length='30' id='registerpwd' name='registerpwd'>
 			<label for='registermail'>Mail</label>: <input type='text' length='30' id='registermail' name='registermail'>
-			<input id='registersenden' type='button' value='register'> * Passwort in Klartext!
+			<input type='submit' value='register'> * Passwort in Klartext!
 		</p>
+	</form>
+	<form id='answer' action='ajax.php' method='post'>
 		<p>
 			<label for='data'>Antwort</label>:<br>
 			<textarea rows='20' cols='50' id='data' name='data'></textarea>
 		</p>
 		
 		<p>
-			<input type='button' id='aktualisieren' value='aktualisieren'>
+			<input type='submit' value='aktualisieren'>
 		</p>
 	</form>
 </body>
