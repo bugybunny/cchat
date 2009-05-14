@@ -13,8 +13,8 @@
 // |                 - Die neuen Nachrichten werden in die Datenbank geschrieben				  |
 // |                 - Login überprüfen (Name und Passwort) und den Userstatus auf eingeloggt     |
 // |				 - Neuen user Datensatz (Account) in der Datenbank anlegen, sofern der        |
-// |                   Username noch nicht vorhanden ist 
-// |				 - 	                                    	  |
+// |                   Username noch nicht vorhanden ist 										  |
+// |				 - 	                                    	  								  |
 // |               Es wird ein neues Array $data_answer erstellt. NOCH ERWEITERN                  |
 // |                                                                                              |
 // |                                                                                              |
@@ -26,6 +26,7 @@
 // |                                                                                              |
 // +----------------------------------------------------------------------------------------------+
 include 'config.inc.php';
+
 session_start();
 /* header('Content-type: text/json; charset=utf-8'); */
 mysql_connect($mysql_server, $mysql_login, $mysql_pass);
@@ -50,28 +51,18 @@ $data_answer['messages'][1]['time']    = floor(microtime(true) * 1000);
  $data_answer['logedin'][0] = true;
  $data_answer['logedin'][1] = false; */
 
-/* Login */
+/* Login überprüfen */
 if(isset($data['login'])) {
-	/* Username und Passwort überprüfen */
-	if(!empty($data['login']['name']) && !empty($data['login']['password'])) {
-		/* Datenbankabfrage machen */
-		$name_login = mysql_real_escape_string($data['login']['name']);
-		$result_login = mysql_query("SELECT id, salt FROM user WHERE name = '$name_login'");
-		/* User wurde gefunden */
-		if(mysql_num_rows($result_login)) {
-			/* Passwort mit Verschlüsselung überprüfen */
-			$user = mysql_fetch_assoc($result_login);
-			$password = hash("sha256", $user['salt'] . hash("sha256", $user['salt'] . $data['login']['password']));
-			$result_login = mysql_select("SELECT id FROM user WHERE id = '{$user['id']}' AND password = '$password'");
-			if(mysql_num_rows($result_login)) {
-				$data_answer['login'][$array_id_login] = $data['login']['name'];
-				$array_id_login += 1;
-			}
-		}
-	}
+	require 'login.php';
+	$data_answer['logedin'] = login($data['login']['name'], $date['login']['password']);
 }
 
 /* Registrierung */
+if(isset($data['register'])) {
+	require 'register.php';
+	register($data['register']['name'], $data['register']['password'], $data['register']['mail']);	
+}
+
 if(isset($data['register'])) {
 	/* Neuer Benutzer mit Passwort in der Datenbank anlegen */
 	if(isset($data['register'])) {
