@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+
+#page, #chat {
+	display: none;
+}
+
+#login {
+	text-align: right;
+	margin-right: 50%;
+	margin-top: 30%;
+}
+
+#register {
+	overflow: hidden;
+	height: 0px;
+}

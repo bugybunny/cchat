@@ -12,15 +12,27 @@ echo "
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=UFT-8'>
 	<title>cchat $cchat_version</title>
+	<link rel='stylesheet' type='text/css' href='css/style.css'>
 	<script type='text/javascript' src='javascript/mootools-core.js'></script>
-	<script type='text/javascript' src='javascript/script.js'></script>
+	<script type='text/javascript' src='javascript/scripts.js'></script>
 </head>
 <body>
-	<div id='login'>
-	 "; require "login.inc.php"; echo "
-	</div>
-	<div id='chat'>
-	 "; require "chat.inc.php"; echo "
+	<noscript>You need JavaScript to access cchat.</noscript>
+	<div id='page'>
+		<div id='login'>
+			<form id='loginform' action='' method='post'>
+				<label for='name'>Name</label>: <input id='name' type='text' name='name'><br>
+				<label for='name'>Passwort</label>: <input id='password' type='password' name='password'><br>
+				<div id='register'>
+					<label for='name'>Wiederholen</label>: <input id='password2' type='password' name='password2'><br>
+					<label for='name'>E-Mail</label>: <input id='email' type='text' name='email'><br>
+				</div>
+				<input id='loginsubmit' type='submit' value='Login'> <a id='registertoggle' href=''>Registrieren</a>
+			</form>
+		</div>
+		<div id='chat'>
+			CHAT
+		</div>
 	</div>
 </body>
 </html>
