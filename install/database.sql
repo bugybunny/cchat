@@ -27,7 +27,7 @@ CREATE TABLE `action` (
   `typ` int(10) unsigned NOT NULL,
   `text` varchar(256) DEFAULT NULL,
   `userid` int(10) unsigned NOT NULL,
-  `time` int(10) unsigned NOT NULL,
+  `time` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
@@ -51,9 +51,13 @@ SET character_set_client = utf8;
 CREATE TABLE `user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(65) NOT NULL,
   `salt` varchar(50) NOT NULL,
   `mail` varchar(60) NOT NULL,
+  `register` datetime NOT NULL,
+  `acivated` datetime DEFAULT NULL,
+  `logedin` tinyint(1) DEFAULT NULL,
+  `lastrefresh` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
@@ -76,4 +80,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-05-07  7:30:52
+-- Dump completed on 2009-05-28  9:26:54
