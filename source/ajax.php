@@ -37,54 +37,26 @@ $data = json_decode($_POST['data'], true);
 $array_id_login  = 0;
 $array_id_logout = 0;
 
-/* Nachrichten */
-$data_answer['messages'][0]['sender']  = "Hans";
-$data_answer['messages'][0]['message'] = "Hallo";
-$data_answer['messages'][0]['time']    = floor(microtime(true) * 1000);
-$data_answer['messages'][1]['sender']  = "Rolf";
-$data_answer['messages'][1]['message'] = "Hallo Hans";
-$data_answer['messages'][1]['time']    = floor(microtime(true) * 1000);
-
-/* User die sich ein- oder ausgeloggt haben in der Zeit seit dem letzten Senden */
-/* $data_answer['login'][0] = $data['login']['name'];
- $data_answer['logout'][0] = "Rolf";
- $data_answer['logedin'][0] = true;
- $data_answer['logedin'][1] = false; */
-
 /* Login überprüfen */
 if(isset($data['login'])) {
 	require 'login.php';
-	$data_answer['logedin'] = login($data['login']['name'], $date['login']['password']);
+	$data_answer['logedout'] = login($data['login']['name'], $data['login']['password']);
 }
 
 /* Registrierung */
 if(isset($data['register'])) {
 	require 'register.php';
-	register($data['register']['name'], $data['register']['password'], $data['register']['mail']);	
+	register($data['register']['name'], $data['register']['password'], $data['register']['email']);
 }
 
-if(isset($data['register'])) {
-	/* Neuer Benutzer mit Passwort in der Datenbank anlegen */
-	if(isset($data['register'])) {
-		/* Überprüfen ob alle Felder ausgefüllt sind. Wird in der Eingabemaske schon geprüft, da die Daten können
-		 jedoch verändert werden können, wird es hier nochmals überprüft*/
-		if(!empty($data['register']['name']) && !empty($data['register']['password']) && !empty($data['register']['email'])) {
-			$name_register = mysql_real_escape_string($data['register']['name']);
-			$email_register = mysql_real_escape_string($data['register']['email']);
-			$result_register = mysql_query("SELECT name FROM user WHERE name = '$name_register'");
-			/* Der Username existiert noch nicht, deshalb liefert die MySQL-Abfrage kein Ergebnis. Der Account kann erstellt werden */
-			if(!mysql_num_rows($result_register)) {
-				$salt = rand(1, PHP_INT_MAX) . "cchatisttoll" . rand(1, PHP_INT_MAX);
-				$password_register = hash("sha256", $salt . hash("sha256", $salt . $data['register']['password']));
-				echo $password_register;
-				mysql_query("INSERT INTO user (name,password,salt,mail, register) VALUES ('$name_register', '$password_register', '$salt', '$email_register', now())");
-				echo mysql_error();
-				$data_answer['login'][$array_id_login] = $data['register']['name'];
-				$array_id_login += 1;
-			}
-		}
-	}
+/* Nachrichten */
+if(isset($data['messages'])) {
+	require 'messages.php';
+	message($data);
 }
 
-echo json_encode($data_answer);
+/* Antwort an index.php zurückschicken */
+if(isset($data_answer)) {
+	echo json_encode($data_answer);
+}
 ?>
