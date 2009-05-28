@@ -1,12 +1,15 @@
 <?php
 /**
- *
+ * Neuer Benutzer mit Passwort in der Datenbank anlegen
+ * Überprüfen ob alle Felder ausgefüllt sind. Wird in der Eingabemaske schon geprüft, da die Daten können
+ * jedoch verändert werden können, wird es hier nochmals überprüft 
+ * @param string	$name 		Username
+ * @param string	$password	Passwort des Users
+ * @param string	$mail 		E-Mail des Users 
  */
 function register($name, $password, $mail) {
-	/* Registrierung */
-	/* Neuer Benutzer mit Passwort in der Datenbank anlegen */
-	/* Überprüfen ob alle Felder ausgefüllt sind. Wird in der Eingabemaske schon geprüft, da die Daten können
-	 jedoch verändert werden können, wird es hier nochmals überprüft*/
+	$_SESSION['name'] = $name;	
+
 	if(!empty($name) && !empty($password) && !empty($mail)) {
 		$name_register = mysql_real_escape_string($name);
 		$email_register = mysql_real_escape_string($mail);
@@ -21,4 +24,3 @@ function register($name, $password, $mail) {
 		}
 	}
 }
-?>
