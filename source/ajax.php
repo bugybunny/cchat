@@ -35,8 +35,9 @@ mysql_select_db($mysql_db);
 /* Variablen */
 $data = json_decode($_POST['data'], true);
 $data_answer = array();
+$errorcode = 000;
 
-/* Login überprüfen */
+/* Login überprüfen und Errorcode setzen */
 if(isset($data['login'])) {
 	require 'login.php';
 	$errorcode = login($data['login']['name'], $data['login']['password']);
@@ -52,10 +53,18 @@ if(isset($data['register'])) {
 	$data_answer['error'] = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
 }
 
-/* Nachrichten */
-if(isset($data['messages'])) {
+/*
+ * Nachrichten:
+ * Immer wenn eine Anfrage kommt und der User eingeloggt ist, werden die neuen Nachrichten in der Datenbank seit der letzten
+ * Abfrage zurückgeschickt.
+ * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
+ */
+if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
 	require 'messages.php';
-	insertmessages($data);
+	if(isset($data['messages'])) {
+		$errorcode = insertmessages($data);
+		$data_answer['error'] = $errorcode;
+	}
 	// TODO Parameter anpassen, sobald er bei $data mitgesendet wird
 	$data_answer['messages'] = checkNewMessages(1);
 }

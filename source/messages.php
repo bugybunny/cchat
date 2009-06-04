@@ -18,7 +18,7 @@ function insertmessages($data) {
 	}
 	/* Aktuell ist kein User eingeloggt. Deshalb können keine Nachrichten verschickt werden */
 	else {
-		echo "Bitte einloggen!";
+		return 101;
 	}
 }
 
@@ -31,6 +31,8 @@ function insertmessages($data) {
  */
 function checkNewMessages($time) {
 	global $codes;
+	$result = array();
+	
 	$result_message = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = {$codes['message']} AND a.time >= {$time} AND a.userid = u.id");
 	echo mysql_error();
 	// TODO Login und Logout setzen
