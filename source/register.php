@@ -6,6 +6,7 @@
  * @param string	$name 		Username
  * @param string	$password	Passwort des Users
  * @param string	$mail 		E-Mail des Users 
+ * @return int					Errorcode: Beschreibung der Codes unter http://code.google.com/p/cchat/wiki/Datenaustausch
  */
 function register($name, $password, $mail) {
 	$_SESSION['name'] = $name;	
@@ -29,8 +30,9 @@ function register($name, $password, $mail) {
 			login($name_register, $password);
 			
 			echo mysql_error();
-		} else {
-			/* Errorcode: Benutzer bereits vorhanden */
+		} 
+		/* Errorcode: Benutzer bereits vorhanden */
+		else {
 			return 301;
 		}
 	}
