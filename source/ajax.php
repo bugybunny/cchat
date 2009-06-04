@@ -46,13 +46,13 @@ if(isset($data['login'])) {
 /* Registrierung */
 if(isset($data['register'])) {
 	require 'register.php';
-	register($data['register']['name'], $data['register']['password'], $data['register']['email']);
+	$data_answer['error'] = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
 }
 
 /* Nachrichten */
 if(isset($data['messages'])) {
 	require 'messages.php';
-	message($data);
+	$data_answer['messages'] = insertmessages($data);
 }
 
 /* Antwort an index.php zurückschicken */
