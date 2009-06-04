@@ -52,11 +52,11 @@ if(isset($data['register'])) {
 /* Nachrichten */
 if(isset($data['messages'])) {
 	require 'messages.php';
-	$data_answer['messages'] = insertmessages($data);
+	insertmessages($data);
+	// TODO Parameter anpassen, sobald er bei $data mitgesendet wird
+	$data_answer['messages'] = checkNewMessages(1);
 }
 
 /* Antwort an index.php zurückschicken */
-if(isset($data_answer)) {
-	echo json_encode($data_answer);
-}
+echo json_encode($data_answer);
 ?>
