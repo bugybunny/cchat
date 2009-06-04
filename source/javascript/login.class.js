@@ -61,11 +61,13 @@ var Login = new Class({
 	},
 	
 	logedin: function() {
-		alert("Eingeloggt!");
+		$("login").setStyle("display", "none");
+		$("chat").setStyle("display", "block");
 	},
 	
 	logedout: function() {
-		alert("Ausgeloggt!");
+		$("chat").setStyle("display", "none");
+		$("login").setStyle("display", "block");
 	},
 	
 	toggle: function() {

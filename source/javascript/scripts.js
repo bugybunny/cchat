@@ -1,10 +1,11 @@
-var xhr, login;
+var login, chat;
+var xhr = new XHR();
 
 document.addEvent("domready", function() {
 	$("page").setStyle("display", "block");
 	
-	xhr = new XHR();
 	login = new Login();
+	chat = new Chat();
 	
 	// Default errors
 	xhr.addEvent("error", function(code) {

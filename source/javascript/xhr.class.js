@@ -6,17 +6,17 @@ var XHR = new Class({
 	initialize: function() {
 		this.request = new Request.JSON({
 			'url': 'ajax.php',
-			'link': 'chain',
-			'success': function(response) {
-				this.messages(response),
-				this.user(response),
-				this.login(response),
-				this.error(response)
-			}.bind(this),
-			'failure': function() {
-				this.error({'error': 400});
-			}.bind(this)
-		})
+			'link': 'chain'
+		});
+		this.request.addEvent('success', function(response) {
+			this.messages(response),
+			this.user(response),
+			this.login(response),
+			this.error(response)
+		}.bind(this));
+		this.request.addEvent('failure', function() {
+			this.error({'error': 400});
+		}.bind(this));
 	},
 	
 	messages: function(response) {
@@ -35,9 +35,9 @@ var XHR = new Class({
 		}
 	},
 	login: function(response) {
-		if(this.logedin && request.logedout) {
+		if(this.logedin && response.logedout) {
 			this.fireEvent("logout", response);
-		} else if(!this.logedin && !request.logedout) {
+		} else if(!this.logedin && !response.logedout) {
 			this.fireEvent("login", response);
 		}
 	},
