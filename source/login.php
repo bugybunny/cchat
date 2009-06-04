@@ -44,7 +44,6 @@ function login($name, $password) {
 		echo $_SESSION['name'];
 		echo $_SESSION['userid'];
 		if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
-			echo "aasasas";
 			mysql_query("UPDATE user SET logedin = false WHERE id = {$_SESSION['userid']}");
 			session_destroy();
 		}
