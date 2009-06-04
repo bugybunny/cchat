@@ -31,18 +31,16 @@ function insertmessages($data) {
  */
 function checkNewMessages($time) {
 	global $codes;
-	$result_message = mysql_query("SELECT u.name, a.text FROM action a, user u WHERE a.typ = {$codes['message']} AND a.time >= {$time} AND a.id = u.id");
+	$result_message = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = {$codes['message']} AND a.time >= {$time} AND a.userid = u.id");
 	echo mysql_error();
-	if(!mysql_num_rows($result_message)) {
-		// TODO Login und Logout setzen
-		$action = mysql_fetch_assoc($result_message);
-		foreach($action as $row) {
-			$result[]['sender'] = $row['name'];
-			$result[]['message'] = $row['text'];
-			$result[]['time'] = floor(microtime() / 1000);
-		}
-		return $result;
+	// TODO Login und Logout setzen
+	while($action = mysql_fetch_assoc($result_message)) {
+		$message['sender'] = $action['name'];
+		$message['message'] = $action['text'];
+		$message['time'] = $action['time'];
+		$result[] = $message;
 	}
+	return $result;
 }
 
 ?>

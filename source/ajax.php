@@ -55,6 +55,8 @@ if(isset($data['messages'])) {
 	insertmessages($data);
 	// TODO Parameter anpassen, sobald er bei $data mitgesendet wird
 	$data_answer['messages'] = checkNewMessages(1);
+	var_dump($data_answer['messages']);
+		
 }
 
 /* Antwort an index.php zurückschicken */
