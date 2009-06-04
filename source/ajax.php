@@ -40,7 +40,11 @@ $array_id_logout = 0;
 /* Login überprüfen */
 if(isset($data['login'])) {
 	require 'login.php';
-	$data_answer['logedout'] = login($data['login']['name'], $data['login']['password']);
+	$errorcode = login($data['login']['name'], $data['login']['password']);
+	if($errorcode != 000) {
+		$data_answer['logedout'] = true;
+		$data_answer['error'] = $errorcode;
+	}
 }
 
 /* Registrierung */
@@ -55,8 +59,6 @@ if(isset($data['messages'])) {
 	insertmessages($data);
 	// TODO Parameter anpassen, sobald er bei $data mitgesendet wird
 	$data_answer['messages'] = checkNewMessages(1);
-	var_dump($data_answer['messages']);
-		
 }
 
 /* Antwort an index.php zurückschicken */

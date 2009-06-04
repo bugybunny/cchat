@@ -6,9 +6,9 @@
  * Name des aktuell eingeloggten Users gespeichert und in $_SESSION['userid']
  * die dazugehörige Userid
  *
- * @param string 	$name 		Name den der User eingegeben hat
+ * @param string	$name 		Name den der User eingegeben hat
  * @param string	$password 	Passwort das der User eingegeben hat
- * @return boolean  $logedin    True wenn der User eingeloggt wurde, false wenn nicht
+ * @return int					Errorcode: http://code.google.com/p/cchat/wiki/Datenaustausch
  */
 function login($name, $password) {
 	/* Username und Passwort überprüfen */
@@ -31,7 +31,9 @@ function login($name, $password) {
 			$_SESSION['name'] = $name;
 			$_SESSION['userid'] = $user['id'];
 				
-			return false;
+			return 000;
+		} else {
+			return 202;
 		}
 	}
 
@@ -39,15 +41,11 @@ function login($name, $password) {
 	 * und die Kombination aus $name und $password nicht gefunden wird, wird er mit dem alten Username ausgeloggt
 	 */
 	else {
-		$_SESSION['name'] = "Marco";
-		$_SESSION['userid'] = 1;
-		echo $_SESSION['name'];
-		echo $_SESSION['userid'];
 		if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
 			mysql_query("UPDATE user SET logedin = false WHERE id = {$_SESSION['userid']}");
 			session_destroy();
 		}
 		/* Der User hat sich augeloggt */
-		return true;
+		return 201;
 	}
 }
