@@ -14,6 +14,8 @@ echo "
 	<title>cchat $cchat_version</title>
 	<link rel='stylesheet' type='text/css' href='css/style.css'>
 	<script type='text/javascript' src='javascript/mootools-core.js'></script>
+	<script type='text/javascript' src='javascript/xhr.class.js'></script>
+	<script type='text/javascript' src='javascript/login.class.js'></script>
 	<script type='text/javascript' src='javascript/scripts.js'></script>
 </head>
 <body>
