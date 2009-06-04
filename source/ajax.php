@@ -7,8 +7,8 @@
 // | Autor         Marco Syfrig (syfm)                                                            |
 // | Datum         2009-04-30                                                                     |
 // |                                                                                              |
-// | Beschreibung  Erhält von index.php ein JSON dekodiertes Array $data per POST und wertet es   |
-// |               aus. 																		  |
+// | Beschreibung  Erhält von index.php ein JSON dekodiertes Array $data per POST, wertet es      |
+// |               aus und gibt ein Array $data_answer zurück									  |
 // |               Diese Datei macht Folgendes:													  |
 // |                 - Die neuen Nachrichten werden in die Datenbank geschrieben				  |
 // |                 - Login überprüfen (Name und Passwort) und den Userstatus auf eingeloggt     |
@@ -34,8 +34,7 @@ mysql_select_db($mysql_db);
 
 /* Variablen */
 $data = json_decode($_POST['data'], true);
-$array_id_login  = 0;
-$array_id_logout = 0;
+$data_answer = array();
 
 /* Login überprüfen */
 if(isset($data['login'])) {
