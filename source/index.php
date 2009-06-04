@@ -16,6 +16,7 @@ echo "
 	<script type='text/javascript' src='javascript/mootools-core.js'></script>
 	<script type='text/javascript' src='javascript/xhr.class.js'></script>
 	<script type='text/javascript' src='javascript/login.class.js'></script>
+	<script type='text/javascript' src='javascript/chat.class.js'></script>
 	<script type='text/javascript' src='javascript/scripts.js'></script>
 </head>
 <body>
@@ -33,7 +34,12 @@ echo "
 			</form>
 		</div>
 		<div id='chat'>
-			CHAT
+			<div id='chatmessages'></div>
+			<form id='chatform' action='' method='post'>
+				<input id='chattext' type='text' name='text'>
+				<input type='submit' value='Go'>
+				<input id='chatlogout' type='button' name='logout' value='Logout'>
+			</form>
 		</div>
 	</div>
 </body>
