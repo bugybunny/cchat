@@ -2,6 +2,7 @@ var XHR = new Class({
 	Implements: Events,
 	
 	logedin: false,
+	isRunning: false,
 	
 	initialize: function() {
 		this.request = new Request.JSON({
@@ -9,12 +10,14 @@ var XHR = new Class({
 			'link': 'chain'
 		});
 		this.request.addEvent('success', function(response) {
-			this.messages(response),
-			this.user(response),
-			this.login(response),
-			this.error(response)
+			this.isRunning = false;
+			this.messages(response);
+			this.user(response);
+			this.login(response);
+			this.error(response);
 		}.bind(this));
 		this.request.addEvent('failure', function() {
+			this.isRunning = false;
 			this.error({'error': 400});
 		}.bind(this));
 	},
@@ -50,6 +53,7 @@ var XHR = new Class({
 
 	send: function(data) {
 		data = JSON.encode(data);
+		this.isRunning = true;
 		this.request.send({'data': {'data': data}});
 		return this.request;
 	},

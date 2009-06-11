@@ -5,6 +5,7 @@
  */
 
 include_once "config.inc.php";
+header('Content-type: text/html; charset=utf-8');
 
 echo "
 <!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Strict//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
@@ -36,7 +37,7 @@ echo "
 		<div id='chat'>
 			<div id='chatmessages'></div>
 			<form id='chatform' action='' method='post'>
-				<input id='chattext' type='text' name='text'>
+				<input id='chattext' type='text' name='text' size='100'>
 				<input type='submit' value='Go'>
 				<input id='chatlogout' type='button' name='logout' value='Logout'>
 			</form>

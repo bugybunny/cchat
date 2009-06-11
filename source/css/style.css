@@ -14,3 +14,18 @@
 	overflow: hidden;
 	height: 0px;
 }
+
+#chatmessages {
+	position: absolute;
+	top: 1em;
+	bottom: 3em;
+}
+
+.messagesender {
+	font-weight: bold;
+}
+
+#chatform {
+	position: absolute;
+	bottom: 1em;
+}
