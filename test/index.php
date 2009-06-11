@@ -20,16 +20,16 @@
 	<form id='login' action='ajax.php' method='post'>
 		<p>
 			<label for='loginname'>Login</label>: <input type='text' length='30' id='loginname' name='loginname'>
-			<label for='loginpwd'>Passwort</label>: <input type='text' length='30' id='loginpwd' name='loginpwd'>
-			<input type='submit' value='login'> * Passwort in Klartext!
+			<label for='loginpwd'>Passwort</label>: <input type='password' length='30' id='loginpwd' name='loginpwd'>
+			<input type='submit' value='login'>
 		</p>
 	</form>
 	<form id='register' action='ajax.php' method='post'>
 		<p>
 			<label for='registername'>User</label>: <input type='text' length='30' id='registername' name='registername'>
-			<label for='registerpwd'>Passwort</label>: <input type='text' length='30' id='registerpwd' name='registerpwd'>
+			<label for='registerpwd'>Passwort</label>: <input type='password' length='30' id='registerpwd' name='registerpwd'>
 			<label for='registermail'>Mail</label>: <input type='text' length='30' id='registermail' name='registermail'>
-			<input type='submit' value='register'> * Passwort in Klartext!
+			<input type='submit' value='register'>
 		</p>
 	</form>
 	<form id='answer' action='ajax.php' method='post'>
