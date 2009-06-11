@@ -34,12 +34,12 @@
 	</form>
 	<form id='answer' action='ajax.php' method='post'>
 		<p>
-			<label for='data'>Antwort</label>:<br>
-			<textarea rows='20' cols='50' id='data' name='data'></textarea>
+			<input type='submit' value='aktualisieren'>
 		</p>
 		
 		<p>
-			<input type='submit' value='aktualisieren'>
+			<label for='data'>Antwort</label>:<br>
+			<textarea rows='20' cols='50' id='data' name='data'></textarea>
 		</p>
 	</form>
 </body>
