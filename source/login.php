@@ -8,13 +8,19 @@
  * Name des aktuell eingeloggten Users gespeichert und in $_SESSION['userid']
  * die dazugehörige Userid
  *
- * @param string	$name 		Name den der User eingegeben hat
- * @param string	$password 	Passwort, welches User eingegeben hat
+ * @param  string	$name 		Name den der User eingegeben hat
+ * @param  string	$password 	Passwort, welches User eingegeben hat
  * @return int					Errorcode: Beschreibung der Codes unter http://code.google.com/p/cchat/wiki/Datenaustausch
  */
 function login($name, $password) {
-	/* User zuerst ausloggen */
-	logoutUser();
+	/*
+	 * Sofern momentan ein User eingeloggt ist, wird er zuerst ausgeloggt. Damit ist es nicht möglich,
+	 * dass ein User bei mehreren Leuten gleichzeitig eingeloggt ist.
+	 */
+	if(isset($_SESSION['userid']) && isset($_SESSION['name'])) {
+		require 'logout.php';
+		logoutUser($_SESSION['userid'], $_SESSION['name']);
+	}
 
 	/* Username und Passwort überprüfen */
 	/* Datenbankabfrage machen */
@@ -29,12 +35,18 @@ function login($name, $password) {
 
 		/* Passwortüberprüfung */
 		if(mysql_num_rows($result_login)) {
-			/* Userstatus auf logedin setzen */
-			mysql_query("UPDATE user SET logedin = true, lastrefresh = now() WHERE user.id = {$user['id']}");
+			require_once 'actions.php';
 
 			/* Username und UserID des aktuell eingeloggten Users */
 			$_SESSION['name'] = $name;
 			$_SESSION['userid'] = $user['id'];
+
+			/* Userstatus auf logedin setzen */
+			mysql_query("UPDATE user SET logedin = true, lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
+
+			/* Neuen Action-Datensatz des Typs login einfügen */
+			insertLogin($_SESSION['userid'], $_SESSION['name']);
+
 			return 000;
 		}
 		/* Errorcode: Passwort ist falsch */
@@ -44,20 +56,11 @@ function login($name, $password) {
 	}
 	/* Errorcode: Es wurde kein User mit dem eingegeben Namen gefunden */
 	else {
-		// if(!empty($name) {
+		if($name == "logout" && empty($password) && isset($_SESSION['userid'])) {
+			require_once 'logout.php';
+			logoutUser($_SESSION['userid']);
+		} else if(!empty($name)) {
 			return 201;
-	//	} 
-	}
-}
-
-/**
- * Sofern momentan ein User eingeloggt ist, wird er zuerst ausgeloggt. Damit ist es nicht möglich,
- * dass sich ein User bei mehreren Leuten gleichzeitig einloggen kann. *
- */
-function logoutUser() {
-	/* Aktuell eingeloggten User ausloggen */
-	if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
-		mysql_query("UPDATE user SET logedin = false WHERE id = {$_SESSION['userid']}");
-		session_destroy();
+		}
 	}
 }
