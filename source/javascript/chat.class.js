@@ -1,6 +1,7 @@
 var Chat = new Class({
 	lastrefresh: 0,
 	queue: [],
+	userlist: {},
 	
 	initialize: function() {
 		$('chatform').addEvent('submit', function(e) {
@@ -20,6 +21,8 @@ var Chat = new Class({
 		xhr.addEvent('login', this.login.bind(this));
 		xhr.addEvent('logout', this.logout.bind(this));
 		xhr.addEvent('messages', this.messages.bind(this));
+		xhr.addEvent('userlogin', this.userlogin.bind(this));
+		xhr.addEvent('userlogout', this.userlogout.bind(this));
 	},
 	
 	messages: function(messages) {
@@ -44,6 +47,19 @@ var Chat = new Class({
 			container.grab(sender);
 			container.grab(text);
 			$('chatmessages').grab(container);
+	},
+	
+	userlogin: function(name) {
+		if(!this.userlist[name]) {
+			this.userlist[name] = new Element('li', {
+				'text': name
+			});
+		}
+		$('chatuserlist').grab(this.userlist[name]);
+	},
+	userlogout: function(name) {
+		if(this.userlist[name])
+			this.userlist[name].dispose();
 	},
 	
 	checkOverflow: function() {
