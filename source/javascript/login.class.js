@@ -2,7 +2,7 @@ var Login = new Class({
 	isRegister: false,
 	
 	initialize: function() {
-		$("loginform").addEvent("submit", function(e) {
+		$("login").addEvent("submit", function(e) {
 			e.stop();
 			this.login();
 		}.bind(this));

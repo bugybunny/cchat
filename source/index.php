@@ -8,7 +8,7 @@ include_once "config.inc.php";
 header('Content-type: text/html; charset=utf-8');
 
 echo "
-<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Strict//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
+<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
 <html>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=UFT-8'>
@@ -21,25 +21,33 @@ echo "
 	<script type='text/javascript' src='javascript/scripts.js'></script>
 </head>
 <body>
-	<noscript>You need JavaScript to access cchat.</noscript>
+	<noscript><p>You need JavaScript to access cchat.</p></noscript>
 	<div id='page'>
-		<div id='login'>
-			<form id='loginform' action='' method='post'>
+		<form id='login' action='' method='post'>
+			<div>
 				<label for='name'>Name</label>: <input id='name' type='text' name='name'><br>
-				<label for='name'>Passwort</label>: <input id='password' type='password' name='password'><br>
-				<div id='register'>
-					<label for='name'>Wiederholen</label>: <input id='password2' type='password' name='password2'><br>
-					<label for='name'>E-Mail</label>: <input id='email' type='text' name='email'><br>
-				</div>
+				<label for='name'>Passwort</label>: <input id='password' type='password' name='password'>
+			</div>
+			<div id='register'>
+				<label for='name'>Wiederholen</label>: <input id='password2' type='password' name='password2'><br>
+				<label for='name'>E-Mail</label>: <input id='email' type='text' name='email'><br>
+			</div>
+			<div>
 				<input id='loginsubmit' type='submit' value='Login'> <a id='registertoggle' href=''>Registrieren</a>
-			</form>
-		</div>
+			</div>
+		</form>
 		<div id='chat'>
 			<div id='chatmessages'></div>
+			<div id='chatuser'>
+				<p>User online:</p>
+				<ul id='chatuserlist'></ul>
+			</div>
 			<form id='chatform' action='' method='post'>
-				<input id='chattext' type='text' name='text' size='100'>
-				<input type='submit' value='Go'>
-				<input id='chatlogout' type='button' name='logout' value='Logout'>
+				<p>
+					<input id='chattext' type='text' name='text' size='100'>
+					<input type='submit' value='Go'>
+					<input id='chatlogout' type='button' name='logout' value='Logout'>
+				</p>
 			</form>
 		</div>
 	</div>
