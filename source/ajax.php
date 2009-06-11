@@ -28,16 +28,35 @@
 include 'config.inc.php';
 
 session_start();
-/* header('Content-type: text/json; charset=utf-8'); */
+header('Content-type: text/json; charset=utf-8');
+
+/* Datenbankverbindung herstellen */
 mysql_connect($mysql_server, $mysql_login, $mysql_pass);
 mysql_select_db($mysql_db);
-
-/* Variablen */
+/*
+ * Variablendeklaration
+ */
 $data = json_decode($_POST['data'], true);
+/* Array, welches zurückgeschick wird an script.js */
 $data_answer = array();
 $errorcode = 000;
 
-/* Login überprüfen und Errorcode setzen */
+/* Lastrefresh bei User aktualisieren */
+if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
+	mysql_query("UPDATE user SET lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
+	
+}
+
+/* Registrierung */
+if(isset($data['register'])) {
+	require 'register.php';
+	$data_answer['error'] = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
+}
+
+/* Login:
+ * Überprüfen und Errorcode setzen
+ *
+ */
 if(isset($data['login'])) {
 	require 'login.php';
 	$errorcode = login($data['login']['name'], $data['login']['password']);
@@ -47,12 +66,6 @@ if(isset($data['login'])) {
 	}
 }
 
-/* Registrierung */
-if(isset($data['register'])) {
-	require 'register.php';
-	$data_answer['error'] = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
-}
-
 /*
  * Nachrichten:
  * Immer wenn eine Anfrage kommt und der User eingeloggt ist, werden die neuen Nachrichten in der Datenbank seit der letzten
@@ -60,15 +73,18 @@ if(isset($data['register'])) {
  * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
  */
 if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
-	require 'messages.php';
-	if(isset($data['messages'])) {
-		$errorcode = insertmessages($data);
+	require_once 'actions.php';
+	if(isset($data['messages']) && isset($_SESSION['userid'])) {
+		$errorcode = insertmessages($data, $_SESSION['userid']);
 		$data_answer['error'] = $errorcode;
 	}
-	// TODO Parameter anpassen, sobald er bei $data mitgesendet wird
-	$data_answer['messages'] = checkNewMessages(1);
+	if(!isset($data['last'])) {
+		$data['last'] = 0;
+	}
+	$data_answer['messages'] = checkNewMessages($data['last']);
 }
 
 /* Antwort an index.php zurückschicken */
-echo json_encode($data_answer);
+echo json_encode($data_answer); 
+
 ?>

@@ -24,6 +24,7 @@ function register($name, $password, $mail) {
 			$password_register = hash("sha256", $salt . hash("sha256", $salt . $password));
 			/* Neuen user Daten */
 			mysql_query("INSERT INTO user (name, password, salt, mail, register, logedin, lastrefresh) VALUES ('$name_register', '$password_register', '$salt', '$email_register', now(), true, now())");
+			echo mysql_error();
 			
 			/* User automatisch einloggen nach der Registrierung */
 			require 'login.php';
