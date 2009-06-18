@@ -2,11 +2,11 @@
 /**
  * Loggt zuerst den aktuell eingeloggten User aus.
  *
- * Überprüft ob ein User mit dem Namen $user und dem Passwort $password existiert
+ * ÃœberprÃ¼ft ob ein User mit dem Namen $user und dem Passwort $password existiert
  * Ist dies der Fall, wird der Status user.logedin auf true gesetzt und die
  * Session-Variable name auf $name gesetzt. In $_SESSION['name'] ist immer der
  * Name des aktuell eingeloggten Users gespeichert und in $_SESSION['userid']
- * die dazugehörige Userid
+ * die dazugehÃ¶rige Userid
  *
  * @param  string	$name 		Name den der User eingegeben hat
  * @param  string	$password 	Passwort, welches User eingegeben hat
@@ -14,26 +14,26 @@
  */
 function login($name, $password) {
 	/*
-	 * Sofern momentan ein User eingeloggt ist, wird er zuerst ausgeloggt. Damit ist es nicht möglich,
+	 * Sofern momentan ein User eingeloggt ist, wird er zuerst ausgeloggt. Damit ist es nicht mÃ¶glich,
 	 * dass ein User bei mehreren Leuten gleichzeitig eingeloggt ist.
-	 */
-	if(isset($_SESSION['userid']) && isset($_SESSION['name'])) {
+	 */	
+	if(isset($_SESSION['userid'])) {
 		require 'logout.php';
-		logoutUser($_SESSION['userid'], $_SESSION['name']);
+		logoutUser($_SESSION['userid']);
 	}
 
-	/* Username und Passwort überprüfen */
+	/* Username und Passwort Ã¼berprÃ¼fen */
 	/* Datenbankabfrage machen */
 	$name_login = mysql_real_escape_string($name);
 	$result_login = mysql_query("SELECT id, salt FROM user WHERE name = '$name_login'");
 	/* User wurde gefunden */
 	if(mysql_num_rows($result_login)) {
-		/* Passwort mit Verschlüsselung überprüfen */
+		/* Passwort mit VerschlÃ¼sselung Ã¼berprÃ¼fen */
 		$user = mysql_fetch_assoc($result_login);
 		$password_login = hash("sha256", $user['salt'] . hash("sha256", $user['salt'] . $password));
 		$result_login = mysql_query("SELECT id FROM user WHERE id = '{$user['id']}' AND password = '$password_login'");
 
-		/* Passwortüberprüfung */
+		/* PasswortÃ¼berprÃ¼fung */
 		if(mysql_num_rows($result_login)) {
 			require_once 'actions.php';
 
@@ -42,9 +42,9 @@ function login($name, $password) {
 			$_SESSION['userid'] = $user['id'];
 
 			/* Userstatus auf logedin setzen */
-			mysql_query("UPDATE user SET logedin = true, lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
+			mysql_query("UPDATE user SET logedin = true WHERE user.id = {$_SESSION['userid']}");
 
-			/* Neuen Action-Datensatz des Typs login einfügen */
+			/* Neuen Action-Datensatz des Typs login einfÃ¼gen */
 			insertLogin($_SESSION['userid'], $_SESSION['name']);
 
 			return 000;

@@ -1,8 +1,8 @@
 <?php
 /**
  * Neuer Benutzer mit Passwort in der Datenbank anlegen
- * Überprüfen ob alle Felder ausgefüllt sind. Wird in der Eingabemaske schon geprüft, da die Daten können
- * jedoch verändert werden können, wird es hier nochmals überprüft 
+ * ÃœberprÃœfen ob alle Felder ausgefÃ¼llt sind. Wird in der Eingabemaske schon geprÃ¼ft, da die Daten kÃ¶nnen
+ * jedoch verÃ¤ndert werden kÃ¶nnen, wird es hier nochmals Ã¼berprÃ¼ft 
  * @param string	$name 		Username
  * @param string	$password	Passwort des Users
  * @param string	$mail 		E-Mail des Users 
