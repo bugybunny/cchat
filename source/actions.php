@@ -6,8 +6,8 @@ define('CODE_LOGOUT', 30);
 /**
  * Speichert die Nachrichten in der Datenbank
  *
- * @param	array	$data		Enthält die neu geschriebenen Nachrichten, die in die Datenbank geschrieben werden
- * @param	int		$userid		Userid des Users, der die Aktion ausgelöst hat
+ * @param	array	$data		EnthÃ¤lt die neu geschriebenen Nachrichten, die in die Datenbank geschrieben werden
+ * @param	int		$userid		Userid des Users, der die Aktion ausgelÃ¶st hat
  * @return	int					Errorcode: Beschreibung der Codes unter http://code.google.com/p/cchat/wiki/Datenaustausch
  */
 function insertmessages($data, $userid) {
@@ -18,14 +18,14 @@ function insertmessages($data, $userid) {
 			echo mysql_error();
 		}
 	}
-	/* Aktuell ist kein User eingeloggt. Deshalb können keine Nachrichten verschickt werden */
+	/* Aktuell ist kein User eingeloggt. Deshalb kÃ¶nnen keine Nachrichten verschickt werden */
 	else {
 		return 101;
 	}
 }
 
 /**
- * Prüft ob seit der letzten Anfrage eine neue Nachricht / neue Nachrichten geschrieben wurde
+ * PrÃ¼ft ob seit der letzten Anfrage eine neue Nachricht / neue Nachrichten geschrieben wurde
  *
  * @param	long		$time	Zeitpunkt der letzten Anfrage in Millisekunden
  * @return	Array[][]	$newmessages
@@ -47,7 +47,7 @@ function checkNewMessages($time) {
 }
 
 /**
- * Fügt einen neuen Actiondatensatz des Typs login in die Datenbank ein
+ * FÃ¼gt einen neuen Actiondatensatz des Typs login in die Datenbank ein
  *
  * @param int		$userid 	Userid des Users, der sich eingeloggt hat
  * @param string	$username 	Name des Users, der sich eingeloggt hat
@@ -59,7 +59,7 @@ function insertLogin($userid, $username) {
 }
 
 /**
- * Fügt einen neuen Actiondatensatz des Typs logout in die Datenbank ein
+ * FÃ¼gt einen neuen Actiondatensatz des Typs logout in die Datenbank ein
  *
  * @param int		$userid 	Userid des Users, der sich ausgeloggt hat
  * @param string	$username 	Name des Users, der sich ausgeloggt hat
@@ -71,7 +71,7 @@ function insertLogout($userid, $username) {
 }
 
 /**
- * Gibt ein Array mit Usernamen zurück, die sich seit $time eingeloggt haben
+ * Gibt ein Array mit Usernamen zurÃ¼ck, die sich seit $time eingeloggt haben
  *
  * @param	long	$time		Zeitpunkt der letzten Anfrage in Millisekunden
  * @return  array	$newUsers	Array mit den neu eingeloggten Usern
@@ -85,11 +85,10 @@ function getNewUsers($time) {
 		$newUsers[] = $action['name'];
 	}
 	return $newUsers;
-
 }
 
 /**
- * Gibt ein Array mit Usernamen zurück, die sich seit $time ausgeloggt haben
+ * Gibt ein Array mit Usernamen zurÃ¼ck, die sich seit $time ausgeloggt haben
  *
  * @param	long	$time		Zeitpunkt der letzten Anfrage in Millisekunden
  * @return  array	$oldUsers	Array mit den neu ausgeloggten Usern
@@ -103,5 +102,4 @@ function getOldUsers($time) {
 		$oldUsers[] = $action['name'];
 	}
 	return $oldUsers;
-
 }
