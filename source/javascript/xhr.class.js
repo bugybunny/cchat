@@ -39,8 +39,10 @@ var XHR = new Class({
 	},
 	login: function(response) {
 		if(this.logedin && response.logedout) {
+			this.logedin = false;
 			this.fireEvent("logout", response);
 		} else if(!this.logedin && !response.logedout) {
+			this.logedin = true;
 			this.fireEvent("login", response);
 		}
 	},
