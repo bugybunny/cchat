@@ -49,17 +49,21 @@ var Chat = new Class({
 			$('chatmessages').grab(container);
 	},
 	
-	userlogin: function(name) {
-		if(!this.userlist[name]) {
-			this.userlist[name] = new Element('li', {
-				'text': name
-			});
-		}
-		$('chatuserlist').grab(this.userlist[name]);
+	userlogin: function(user) {
+		user.each(function(name) {
+			if(!this.userlist[name]) {
+				this.userlist[name] = new Element('li', {
+					'text': name
+				});
+			}
+			$('chatuserlist').grab(this.userlist[name]);
+		}, this);
 	},
-	userlogout: function(name) {
-		if(this.userlist[name])
-			this.userlist[name].dispose();
+	userlogout: function(user) {
+		user.each(function(name) {
+			if(this.userlist[name])
+				this.userlist[name].dispose();
+		}, this);
 	},
 	
 	checkOverflow: function() {
