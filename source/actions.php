@@ -79,8 +79,9 @@ function insertLogout($userid, $username) {
 function getNewUsers($time) {
 	$newUsers = array();
 	$result_login = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = ".CODE_LOGIN." AND a.time > {$time} AND a.userid = u.id");
-
-	while($action = mysql_fetch_assoc($result_message)) {
+	echo mysql_error();
+	
+	while($action = mysql_fetch_assoc($result_login)) {
 		$newUsers[] = $action['name'];
 	}
 	return $newUsers;
@@ -95,11 +96,12 @@ function getNewUsers($time) {
  */
 function getOldUsers($time) {
 	$oldUsers = array();
-	$result_login = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = ".CODE_LOGOUT." AND a.time > {$time} AND a.userid = u.id");
+	$result_logout = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = ".CODE_LOGOUT." AND a.time > {$time} AND a.userid = u.id");
 
-	while($action = mysql_fetch_assoc($result_message)) {
+	echo mysql_error();
+	while($action = mysql_fetch_assoc($result_logout)) {
 		$oldUsers[] = $action['name'];
 	}
-	return $newUsers;
+	return $oldUsers;
 
 }
