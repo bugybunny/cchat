@@ -96,7 +96,6 @@ function getNewUsers($time) {
 function getOldUsers($time) {
 	$oldUsers = array();
 	$result_logout = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = ".CODE_LOGOUT." AND a.time > {$time} AND a.userid = u.id");
-
 	echo mysql_error();
 	while($action = mysql_fetch_assoc($result_logout)) {
 		$oldUsers[] = $action['name'];
