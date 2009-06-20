@@ -161,6 +161,7 @@ var Chat = new Class({
 	 */
 	login: function() {
 		this.refreshIntervall = this.refresh.periodical(100, this);
+		this.checkOverflow.delay(100);
 	},
 	/**
 	 * Entfernt das regelmässige Aufrufen der Refresh-Methode
