@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=UFT-8'>
-	<title>cchat $cchat_version</title>
+	<title>cchat ".CCHAT_VERSION."</title>
 	<script type='text/javascript' src='../source/javascript/mootools-core.js'></script>
 	<script type='text/javascript' src='javascript/script.js'></script>
 </head>
