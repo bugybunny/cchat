@@ -74,7 +74,10 @@ if(isset($data['login'])) {
  * Abfrage, zurückkgeschickt.
  */
 if(userIsLoggedin()) {
-	$data_answer['messages'] = checkNewMessages($data['last']);
+	$messages = checkNewMessages($data['last']);
+	if(count($messages) > 0) {
+		$data_answer['messages'] = $messages;
+	}
 }
 /*
  * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
@@ -97,7 +100,9 @@ checkForLogout(30);
 /*
  * Setzen, ob der User gerade eingeloggt ist
  */
-$data_answer['logedout'] = !userIsLoggedin();
+if(!userIsLoggedin()) {
+	$data_answer['logedout'] = true;
+}
 
 /* Falls ein Fehler aufgetreten ist, senden */
 if($errorcode != 000) {
