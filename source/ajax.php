@@ -22,7 +22,6 @@
 // |		      http://code.google.com/p/cchat/wiki/Datenaustausch zu finden.					  |
 // |                                                                                              |
 // +----------------------------------------------------------------------------------------------+
-include 'error.php';
 require 'config.inc.php';
 require 'login.php';
 require 'logout.php';
@@ -34,6 +33,8 @@ header('Content-type: text/json; charset=utf-8');
 /* Datenbankverbindung herstellen */
 mysql_connect(MYSQL_SERVER, MYSQL_LOGIN, MYSQL_PASS);
 mysql_select_db(MYSQL_DB);
+
+include 'error.php';
 
 /* Variablendeklaration und -initialisierung */
 $data = json_decode($_POST['data'], true);
