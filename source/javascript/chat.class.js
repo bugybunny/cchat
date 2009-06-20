@@ -1,8 +1,30 @@
+/**
+ * Klasse für die Chat-Funktionen (nach Login)
+ * @author Jannis <jannis@gmx.ch>
+ */
 var Chat = new Class({
+	/**
+	 * Mikrosekundenzeit der letzten Empfangenen Nachricht
+	 * @typ Number
+	 */
 	lastrefresh: 0,
+	/**
+	 * Nachrichten-Schlange für ungesendete Nachrichten
+	 * Enthält Strings
+	 * @type Array
+	 */
 	queue: [],
+	/**
+	 * Liste der eingeloggten Benutzer und ihre HTML-Elemente in der Onlineliste im Chat
+	 * Attribute im Objekt sind die Benutzernamen (Strings) und Werte die <li>-Elemente für die Userliste
+	 * @type Array
+	 */
 	userlist: {},
 	
+	/**
+	 * Initialisiert die Chat-Funktionalitäten und fügt die Sende- und Empfangs-Ereignisse hinzu
+	 * @constructor
+	 */
 	initialize: function() {
 		$('chatform').addEvent('submit', function(e) {
 			e.stop();
@@ -25,6 +47,11 @@ var Chat = new Class({
 		xhr.addEvent('userlogout', this.userlogout.bind(this));
 	},
 	
+	/**
+	 * Wenn eine Nachricht empfangen wurde
+	 * Aktualisert die Zeit der letzten Nachricht und zeigt sie an
+	 * @param Array messages Neu Empfangene Nachrichten
+	 */
 	messages: function(messages) {
 		messages.each(function(message) {
 			if(this.lastrefresh < message.time)
@@ -34,6 +61,10 @@ var Chat = new Class({
 		}, this);
 	},
 	
+	/**
+	 * Zeigt eine Nachricht mit Absender, Zeitpunkt und Text auf dem Bildschirm an
+	 * @param Object message Eine Nachricht
+	 */
 	addMessage: function(message) {
 		var container = new Element('div', {
 			'title': this.getMessageTime(message)
@@ -51,6 +82,12 @@ var Chat = new Class({
 		$('chatmessages').grab(container);
 	},
 	
+	/**
+	 * Liefert den anzuzeigenden Zeitpunkt (als lesbaren String) einer Nachricht anhand der Microsekundenzeit zurück
+	 * @param Object message Nachricht, für die der Zeitpunkt zurückgegeben werden soll
+	 * @return String Sendezeitpunkt im Format "H:i:s, d-m-Y"
+	 * @type String
+	 */
 	getMessageTime: function(message) {
 		var date = new Date();
 		var messageTime = Math.floor(message.time);
@@ -69,6 +106,12 @@ var Chat = new Class({
 		return hour + ':' + minute + ':' + second + ', ' + day + '.' + month + '.' + year;
 	},
 	
+	/**
+	 * Zeigt einen User in der Userliste an
+	 * Erzeugt das Listenelement für einen neu eingeloggten User, falls es noch nicht erzeugt wurde
+	 * und bindet es in die Userliste ein
+	 * @param Array user Neu eingeloggte Usernamen (Strings)
+	 */
 	userlogin: function(user) {
 		user.each(function(name) {
 			if(!this.userlist[name]) {
@@ -79,6 +122,10 @@ var Chat = new Class({
 			$('chatuserlist').grab(this.userlist[name]);
 		}, this);
 	},
+	/**
+	 * Entfernt einen User wieder aus der Userliste
+	 * Blendet das Listenelement aus
+	 */
 	userlogout: function(user) {
 		user.each(function(name) {
 			if(this.userlist[name])
@@ -86,6 +133,9 @@ var Chat = new Class({
 		}, this);
 	},
 	
+	/**
+	 * Prüft, ob die Nachrichten aus dem Bildschirm hinauslaufen und entfernt so viele, bis es wieder passt
+	 */
 	checkOverflow: function() {
 		var container = $('chatmessages');
 		while(container.getSize().y < container.getScrollSize().y) {
@@ -93,6 +143,9 @@ var Chat = new Class({
 		}
 	},
 	
+	/**
+	 * Lädt neue Nachrichten vom Server und sendet neu geschriebene mit
+	 */
 	refresh: function() {
 		if(!xhr.isRunning) {
 			xhr.send({
@@ -103,9 +156,16 @@ var Chat = new Class({
 		}
 	},
 	
+	/**
+	 * Ruft regelmässig die Refresh-Methode auf
+	 * @see Chat.refresh()
+	 */
 	login: function() {
 		this.refreshIntervall = this.refresh.periodical(100, this);
 	},
+	/**
+	 * Entfernt das regelmässige Aufrufen der Refresh-Methode
+	 */
 	logout: function() {
 		$clear(this.refreshIntervall);
 	}
