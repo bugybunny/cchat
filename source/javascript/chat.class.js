@@ -4,7 +4,7 @@
  */
 var Chat = new Class({
 	/**
-	 * Mikrosekundenzeit der letzten Empfangenen Nachricht
+	 * Millisekundenzeit der letzten Empfangenen Nachricht
 	 * @typ Number
 	 */
 	lastrefresh: 0,
@@ -90,7 +90,7 @@ var Chat = new Class({
 	 */
 	getMessageTime: function(message) {
 		var date = new Date();
-		var messageTime = Math.floor(message.time);
+		var messageTime = Math.floor(message.time/1000);
 		date.setTime(messageTime);
 		var hour = date.getHours();
 			hour = (hour < 10) ? '0' + hour : hour;
