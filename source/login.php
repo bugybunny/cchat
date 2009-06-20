@@ -17,13 +17,8 @@ function login($name, $password) {
 	$name_login = mysql_real_escape_string($name);
 	$result_login = mysql_query("SELECT id, salt FROM user WHERE name = '$name_login'");
 
+	echo "Der User mit dem Namen $name und $passwort will sich einloggen\n";
 
-	$bla = array();
-	$bla['sender'] = "debug";
-	$bla['message'] = "SESSION-Variablen momentan: {$_SESSION['name']} und {$_SESSION['userid']}\n";
-	$bla['time'] = 0; 
-
-	
 	/* User wurde gefunden */
 	if(mysql_num_rows($result_login)) {
 
@@ -31,7 +26,7 @@ function login($name, $password) {
 		 * Sofern momentan ein User eingeloggt ist, wird er zuerst ausgeloggt. Damit ist es nicht möglich,
 		 * dass ein User bei mehreren Leuten gleichzeitig eingeloggt ist.
 		 */
-		if(isset($_SESSION['userid']) && isset($_SESSION['name'])) {
+		if(userIsLoggedin()) {
 			require 'logout.php';
 			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
 		}
@@ -40,7 +35,7 @@ function login($name, $password) {
 		$user = mysql_fetch_assoc($result_login);
 		$password_login = hash("sha256", $user['salt'] . hash("sha256", $user['salt'] . $password));
 		$result_login = mysql_query("SELECT id FROM user WHERE id = '{$user['id']}' AND password = '$password_login'");
-		
+
 		/* Passwortüberprüfung */
 		if(mysql_num_rows($result_login)) {
 			require_once 'actions.php';
@@ -49,16 +44,9 @@ function login($name, $password) {
 			$_SESSION['name'] = $name;
 			$_SESSION['userid'] = $user['id'];
 
-
-			$bla = array();
-			$bla['sender'] = "debug";
-			$bla['message'] = "SESSION Variablen wurden neu gesetzt: {$_SESSION['name']} und {$_SESSION['userid']}\n";
-			$bla['time'] = 0;
-
-
 			/* Userstatus auf logedin setzen */
 			mysql_query("UPDATE user SET logedin = true WHERE id = {$_SESSION['userid']}");
-			
+
 			/* Neuen Action-Datensatz des Typs login einfügen */
 			insertLogin($_SESSION['userid'], $_SESSION['name']);
 
@@ -71,21 +59,21 @@ function login($name, $password) {
 	}
 	/* Errorcode: Es wurde kein User mit dem eingegeben Namen gefunden */
 	else {
-		if($name == "logout" && empty($password) && isset($_SESSION['userid']) && isset($_SESSION['name'])) {
-			$data_answer['message']['text'] =  "Username blieb leer, username war LOGOUT! SESSION USERID ist {$_SESSION['userid']}\n";
+		if($name == "logout" && empty($password) && userIsLoggedin()) {
 			require_once 'logout.php';
 			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
-		} else if(!empty($name) && isset($_SESSION['userid']) && isset($_SESSION['name'])) {
-
-
-			$bla = array();
-			$bla['sender'] = "debug";
-			$bla['message'] = "User nicht gefunden!\n";
-			$bla['time'] = 0;
-
+		} else {
 			require_once 'logout.php';
 			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
 			return 201;
 		}
 	}
+}
+/**
+ * Prüft ob momentan ein User eingeloggt ist
+ *
+ * @return boolean		TRUE wenn ein Benutzer eingeloggt ist, ansonsten FALSE
+ */
+function userIsLoggedin() {
+	return (isset($_SESSION['name']) && isset($_SESSION['userid']));
 }
