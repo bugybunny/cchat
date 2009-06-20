@@ -1,8 +1,16 @@
 <?php
-	$mysql_server = "localhost";
-	$mysql_login  = "root";
-	$mysql_pass   = "gibbiX12345";
-	$mysql_db     = "cchat";
+	define('MYSQL_SERVER', "localhost");
+	define('MYSQL_LOGIN', "root");
+	define('MYSQL_PASS', "gibbiX12345");
+	define('MYSQL_DB', "cchat");
 	
-	$cchat_version = "1.0 dev";
+	define('CCHAT_VERSION', "1.0 dev");
+	
+	define('CODE_MESSAGE', 10);
+	define('CODE_LOGIN', 20);
+	define('CODE_LOGOUT', 30);
+	define('CODE_ERROR', 40);
+	
+	define('DISPLAY_ERROR_MESSAGES', true);
+	define('ERROR_LOGGING', E_ALL | E_STRICT);
 ?>
