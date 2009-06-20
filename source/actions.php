@@ -27,7 +27,7 @@ function insertmessages($data, $userid) {
  * Prüft ob seit der letzten Anfrage eine neue Nachricht / neue Nachrichten geschrieben wurde
  *
  * @param	long		$time	Zeitpunkt der letzten Anfrage in Millisekunden
- * @return	Array[][]	$newmessages
+ * @return	Array[][]
  * 			Neue Nachrichten mit Sender, Nachrichtentext und Zeit der Nachricht.
  * 			Die Arraystruktur ist unter Answer beschrieben: http://code.google.com/p/cchat/wiki/Datenaustausch
  */
@@ -67,34 +67,41 @@ function insertLogout($userid, $username) {
 }
 
 /**
- * Gibt ein Array mit Usernamen zurück, die sich seit $time eingeloggt haben
+ * Gibt zweidimensionales Array zurück. Eines mit Usernamen, die sich seit $time eingeloggt haben, und eines mit Usernamen, die sich seither ausgeloggt haben.
  *
  * @param	long	$time		Zeitpunkt der letzten Anfrage in Millisekunden
- * @return  array	$newUsers	Array mit den neu eingeloggten Usern
+ * @return  array				Array mit den neu ein- und ausgeloggten Usern
  */
-function getNewUsers($time) {
-	$newUsers = array();
-	$result_login = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = ".CODE_LOGIN." AND a.time > {$time} AND a.userid = u.id");
-	$data_answer['message']['text'] =  mysql_error();
-
-	while($action = mysql_fetch_assoc($result_login)) {
-		$newUsers[] = $action['name'];
+function getUsersLogin($time) {
+	$users = array();
+	$users["login"] = array();
+	$users["logout"] = array();
+	if($time == 0) {
+		$query = mysql_query("SELECT name FROM user WHERE logedin = 1");
+		echo mysql_error();
+		while($action = mysql_fetch_assoc($query)) {
+			$users["login"] = $action['name'];
+		}
+		return $users;
+	} else {
+		$query = mysql_query("SELECT u.name, a.typ FROM action a, user u WHERE (a.typ = ".CODE_LOGIN." OR a.typ = ".CODE_LOGOUT.") AND a.time > {$time} AND a.userid = u.id ORDER BY a.time");
+		echo mysql_error();
+		while($action = mysql_fetch_assoc($query)) {
+			$user = $action["name"];
+			if($action["type"] == CODE_LOGIN) {
+				$position = array_search($name, $users["logout"]);
+				if($position !== false) {
+					unset($users["logout"][$position]);
+				}
+				$users["login"][] = $user;
+			} else {
+				$position = array_search($name, $users["login"]);
+				if($position !== false) {
+					unset($users["login"][$position]);
+				}
+				$users["logout"][] = $user;
+			}
+		}
+		return $users;
 	}
-	return $newUsers;
-}
-
-/**
- * Gibt ein Array mit Usernamen zurück, die sich seit $time ausgeloggt haben
- *
- * @param	long	$time		Zeitpunkt der letzten Anfrage in Millisekunden
- * @return  array	$oldUsers	Array mit den neu ausgeloggten Usern
- */
-function getOldUsers($time) {
-	$oldUsers = array();
-	$result_logout = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = ".CODE_LOGOUT." AND a.time > {$time} AND a.userid = u.id");
-	$data_answer['message']['text'] =  mysql_error();
-	while($action = mysql_fetch_assoc($result_logout)) {
-		$oldUsers[] = $action['name'];
-	}
-	return $oldUsers;
 }
