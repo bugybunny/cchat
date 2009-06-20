@@ -12,7 +12,7 @@ echo "
 <html>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=UFT-8'>
-	<title>cchat $cchat_version</title>
+	<title>cchat ".CCHAT_VERSION."</title>
 	<link rel='stylesheet' type='text/css' href='css/style.css'>
 	<script type='text/javascript' src='javascript/mootools-core.js'></script>
 	<script type='text/javascript' src='javascript/xhr.class.js'></script>
