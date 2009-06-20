@@ -23,7 +23,6 @@ function login($name, $password) {
 	$bla['message'] = "SESSION-Variablen momentan: {$_SESSION['name']} und {$_SESSION['userid']}\n";
 	$bla['time'] = 0; 
 
-
 	
 	/* User wurde gefunden */
 	if(mysql_num_rows($result_login)) {
@@ -34,7 +33,7 @@ function login($name, $password) {
 		 */
 		if(isset($_SESSION['userid']) && isset($_SESSION['name'])) {
 			require 'logout.php';
-			logoutUser($_SESSION['userid'], $_SESSION['name']);
+			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
 		}
 
 		/* Passwort mit Verschlüsselung überprüfen */
@@ -45,14 +44,6 @@ function login($name, $password) {
 		/* Passwortüberprüfung */
 		if(mysql_num_rows($result_login)) {
 			require_once 'actions.php';
-
-
-			$bla = array();
-			$bla['sender'] = "debug";
-			$bla['message'] = "Der User mit dem Namen wurde gefunden!!\n";
-			$bla['time'] = 0;
-
-
 
 			/* Username und UserID des aktuell eingeloggten Users */
 			$_SESSION['name'] = $name;
@@ -83,7 +74,7 @@ function login($name, $password) {
 		if($name == "logout" && empty($password) && isset($_SESSION['userid']) && isset($_SESSION['name'])) {
 			$data_answer['message']['text'] =  "Username blieb leer, username war LOGOUT! SESSION USERID ist {$_SESSION['userid']}\n";
 			require_once 'logout.php';
-			logoutUser($_SESSION['userid'], $_SESSION['name']);
+			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
 		} else if(!empty($name) && isset($_SESSION['userid']) && isset($_SESSION['name'])) {
 
 
@@ -93,7 +84,7 @@ function login($name, $password) {
 			$bla['time'] = 0;
 
 			require_once 'logout.php';
-			logoutUser($_SESSION['userid'], $_SESSION['name']);
+			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
 			return 201;
 		}
 	}
