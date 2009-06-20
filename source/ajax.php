@@ -117,8 +117,9 @@ if(!isset($data['last'])) {
 }
 
 require_once 'actions.php';
-$data_answer['user']['login']  = getNewUsers($last);
-$data_answer['user']['logout'] = getOldUsers($last);
+$users = getUsersLogin($last);
+if(count($users["login"]) != 0 || count($users["logout"]) != 0)
+	$data_answer['user'] = $users;
 
 /* Antwort an XXX.php/js zurückschicken */
 echo json_encode($data_answer);
