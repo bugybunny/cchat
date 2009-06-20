@@ -24,9 +24,8 @@
 }
 #chatuser {
 	position: absolute;
-	width: 4em;
 	top: .5em;
-	right: .5em;
+	right: 1em;
 }
 
 .messagesender {
