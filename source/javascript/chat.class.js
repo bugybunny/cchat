@@ -90,15 +90,14 @@ var Chat = new Class({
 	 */
 	getMessageTime: function(message) {
 		var date = new Date();
-		var messageTime = Math.floor(message.time/1000);
-		date.setTime(messageTime);
+		date.setTime(message.time);
 		var hour = date.getHours();
 			hour = (hour < 10) ? '0' + hour : hour;
 		var minute = date.getMinutes();
 			minute = (minute < 10) ? '0' + minute : minute;
 		var second = date.getSeconds();
 			second = (second < 10) ? '0' + second : second;
-		var day = date.getDay();
+		var day = date.getDate();
 			day = (day < 10) ? '0' + day : day;
 		var month = date.getMonth() + 1;
 			month = (month < 10) ? '0' + month : month;
