@@ -8,18 +8,18 @@ define('CODE_LOGOUT', 30);
  *
  * @param	array	$data		Enthält die neu geschriebenen Nachrichten, die in die Datenbank geschrieben werden
  * @param	int		$userid		Userid des Users, der die Aktion ausgelöst hat
- * @return	int					Errorcode: Beschreibung der Codes unter http://code.google.com/p/cchat/wiki/Datenaustausch
  */
 function insertmessages($data, $userid) {
-	if(isset($userid)) {
+	if(userIsLoggedin()) {
 		foreach($data['messages'] as $message) {
 			$message = mysql_real_escape_string($message);
 			mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_MESSAGE.", '{$message}', {$userid}, ".floor(microtime(true) * 1000).")");
 		}
-	}
-	/* Aktuell ist kein User eingeloggt. Deshalb können keine Nachrichten verschickt werden */
-	else {
-		return 101;
+		// Nachrichten, die älter als die letzten 30 sind, löschen
+		$old = mysql_query("SELECT id FROM action ORDER BY time DESC LIMIT 30, 99999999");
+		while($message = mysql_fetch_assoc($old)) {
+			mysql_query("DELETE FROM action WHERE id = $message[id] LIMIT 1");
+		}
 	}
 }
 
@@ -27,13 +27,13 @@ function insertmessages($data, $userid) {
  * Prüft ob seit der letzten Anfrage eine neue Nachricht / neue Nachrichten geschrieben wurde
  *
  * @param	long		$time	Zeitpunkt der letzten Anfrage in Millisekunden
- * @return	Array[][]
+ * @return	array
  * 			Neue Nachrichten mit Sender, Nachrichtentext und Zeit der Nachricht.
  * 			Die Arraystruktur ist unter Answer beschrieben: http://code.google.com/p/cchat/wiki/Datenaustausch
  */
 function checkNewMessages($time) {
 	$newMessages = array();
-	$result_message = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.time > {$time} AND a.userid = u.id ORDER BY a.time LIMIT 30");
+	$result_message = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.time > {$time} AND a.userid = u.id ORDER BY a.time DESC LIMIT 30");
 	while($action = mysql_fetch_assoc($result_message)) {
 		$message['sender']  = $action['name'];
 		$message['message'] = $action['text'];
@@ -78,14 +78,12 @@ function getUsersLogin($time) {
 	$users["logout"] = array();
 	if($time == 0) {
 		$query = mysql_query("SELECT name FROM user WHERE logedin = 1");
-		echo mysql_error();
 		while($action = mysql_fetch_assoc($query)) {
 			$users["login"] = $action['name'];
 		}
 		return $users;
 	} else {
-		$query = mysql_query("SELECT u.name, a.typ FROM action a, user u WHERE (a.typ = ".CODE_LOGIN." OR a.typ = ".CODE_LOGOUT.") AND a.time > {$time} AND a.userid = u.id ORDER BY a.time");
-		echo mysql_error();
+		$query = mysql_query("SELECT u.name, a.typ FROM action a, user u WHERE (a.typ = ".CODE_LOGIN." OR a.typ = ".CODE_LOGOUT.") AND a.time > {$time} AND a.userid = u.id ORDER BY a.time DESC");
 		while($action = mysql_fetch_assoc($query)) {
 			$user = $action["name"];
 			if($action["type"] == CODE_LOGIN) {
