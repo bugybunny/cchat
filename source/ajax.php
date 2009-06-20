@@ -22,7 +22,10 @@
 // |		      http://code.google.com/p/cchat/wiki/Datenaustausch zu finden.					  |
 // |                                                                                              |
 // +----------------------------------------------------------------------------------------------+
-include 'config.inc.php';
+require 'config.inc.php';
+require 'login.php';
+require 'logout.php';
+require 'actions.php';
 
 session_start();
 header('Content-type: text/json; charset=utf-8');
@@ -33,12 +36,10 @@ mysql_select_db($mysql_db);
 
 /* Variablendeklaration und -initialisierung */
 $data = json_decode($_POST['data'], true);
-/* Array, welches zurückgeschick wird an XXX.php/js */
+/* Array, welches zurückgeschick wird */
 $data_answer = array();
-$errorcode = 000;
-$data_answer['logedout'] = true;
-
-require 'login.php';
+/* Falls letzte Aktualisierung nicht definiert ist, wird 0 angenommen */
+$data['last'] = isset($data['last']) ? $data['last'] : 0;
 
 /*
  * Aktualisiert user.lastrefresh immer
@@ -53,12 +54,7 @@ if(userIsLoggedin()) {
 if(isset($data['register'])) {
 	require 'register.php';
 	$data_answer['error'] = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
-
-	if(userIsLoggedin()) {
-		$data_answer['logedout'] = false;
-	}
-
-	echo "ERRORCODE nach Registrierung: {$data_answer['error']}";
+	trigger_error("ERRORCODE nach Registrierung: {$data_answer['error']}");
 }
 
 /* Login:
@@ -66,61 +62,46 @@ if(isset($data['register'])) {
  */
 if(isset($data['login'])) {
 	$data_answer['error'] = login($data['login']['name'], $data['login']['password']);
-
-	if(userIsLoggedin()) {
-		$data_answer['logedout'] = false;
-	}
-
-	echo "ERRORCODE nach Login: {$data_answer['error']}\n";
+	trigger_error("ERRORCODE nach Login: {$data_answer['error']}");
 }
 
 /*
  * Nachrichten:
  * Immer wenn eine Anfrage kommt (ajax.php aufgerufen wird) und der User eingeloggt ist, werden die neuen Nachrichten in der Datenbank, seit der letzten
  * Abfrage, zurückkgeschickt.
+ */
+$data_answer['messages'] = checkNewMessages($last);
+/*
  * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
  */
 if(isset($data['messages'])) {
-	require_once 'actions.php';
 	if(userIsLoggedin()) {
-		$errorcode = insertmessages($data, $_SESSION['userid']);
-		$data_answer['error'] = $errorcode;
-		/* Wenn $data['last'] nicht gesetzt ist, werden alle Nachrichten aus der DB geholt */
-		if(!isset($data['last'])) {
-			$last = 0;
-		} else {
-			$last = $data['last'];
-		}
-		$data_answer['messages'] = checkNewMessages($last);
+		insertmessages($data, $_SESSION['userid']);
 	} else {
 		/* User nicht eingeloggt: Aktion fehlgeschlagen */
 		$data_answer['error'] = 101;
 	}
-
-	echo "ERRORCODE nach Nachrichten: {$data_answer['error']}\n";
+	trigger_error("ERRORCODE nach Nachrichten: {$data_answer['error']}");
 }
 
 
 /*
  * Alle user, die seit 30 Sekunden nicht mehr erreichbar sind, ausloggen
  */
-require_once 'logout.php';
 checkForLogout(30);
 
 /*
- * User die sich neu eingeloggt bzw. ausgeloggt haben in $data['user'] speichern
+ * Setzen, ob der User gerade eingeloggt ist
  */
-if(!isset($data['last'])) {
-	$last = 0;
-} else {
-	$last = $data['last'];
-}
+$data_answer['logedout'] = !userIsLoggedin();
 
-require_once 'actions.php';
+/*
+ * User setzen, die sich neu ein- oder ausgeloggt haben, falls es welche gibt
+ */
 $users = getUsersLogin($last);
 if(count($users["login"]) != 0 || count($users["logout"]) != 0)
 	$data_answer['user'] = $users;
 
-/* Antwort an XXX.php/js zurückschicken */
+/* Antwort als JSON zurückschicken */
 echo json_encode($data_answer);
 ?>
