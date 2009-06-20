@@ -1,3 +1,8 @@
+/**
+ * Initialisiert all die Chat-Scripts.
+ * @author Jannis <jannis@gmx.ch>
+ */
+
 var login, chat;
 var xhr = new XHR();
 
