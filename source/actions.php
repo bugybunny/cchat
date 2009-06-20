@@ -33,7 +33,7 @@ function insertmessages($data, $userid) {
  */
 function checkNewMessages($time) {
 	$newMessages = array();
-	$result_message = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.time > {$time} AND a.userid = u.id");
+	$result_message = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.time > {$time} AND a.userid = u.id ORDER BY a.time LIMIT 30");
 	while($action = mysql_fetch_assoc($result_message)) {
 		$message['sender']  = $action['name'];
 		$message['message'] = $action['text'];

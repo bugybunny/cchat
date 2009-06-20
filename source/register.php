@@ -24,7 +24,6 @@ function register($name, $password, $mail) {
 			$data_answer['message']['text'] =  mysql_error();
 				
 			/* User automatisch einloggen nach der Registrierung */
-			require 'login.php';
 			login($name_register, $password);
 			return 000;
 		}

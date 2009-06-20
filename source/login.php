@@ -27,7 +27,6 @@ function login($name, $password) {
 		 * dass ein User bei mehreren Leuten gleichzeitig eingeloggt ist.
 		 */
 		if(userIsLoggedin()) {
-			require 'logout.php';
 			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
 		}
 
@@ -38,7 +37,6 @@ function login($name, $password) {
 
 		/* Passwortüberprüfung */
 		if(mysql_num_rows($result_login)) {
-			require_once 'actions.php';
 
 			/* Username und UserID des aktuell eingeloggten Users */
 			$_SESSION['name'] = $name;
@@ -60,7 +58,6 @@ function login($name, $password) {
 	/* Errorcode: Es wurde kein User mit dem eingegeben Namen gefunden */
 	else {
 		if(userIsLoggedin()) {
-			require_once 'logout.php';
 			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
 		}
 		if($name == "logout" && empty($password)) {

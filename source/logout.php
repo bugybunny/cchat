@@ -8,7 +8,6 @@
  */
 function logoutUser($userid, $username, $deleteSessionVariables) {
 	if(isset($userid) && isset($username)) {
-		require_once 'actions.php';
 		mysql_query("UPDATE user SET logedin = false WHERE id = {$userid}");
 		$data_answer['message']['text'] =  mysql_error();
 		insertLogout($userid, $username);
