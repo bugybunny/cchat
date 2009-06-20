@@ -21,6 +21,5 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
 		}
 		return true;
 	}
-	return false;
 }
 ?>
