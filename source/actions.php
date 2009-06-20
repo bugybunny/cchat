@@ -28,7 +28,7 @@ function checkNewMessages($time) {
 		$message['time'] 	= $action['time'];
 		$newMessages[] 		= $message;
 	}
-	return $newMessages;
+	return array_reverse($newMessages);
 }
 /** Speichert die Nachrichten in der Datenbank
  *
