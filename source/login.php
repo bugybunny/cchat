@@ -17,8 +17,6 @@ function login($name, $password) {
 	$name_login = mysql_real_escape_string($name);
 	$result_login = mysql_query("SELECT id, salt FROM user WHERE name = '$name_login'");
 
-	echo "Der User mit dem Namen $name und $password will sich einloggen\n";
-
 	/* User wurde gefunden */
 	if(mysql_num_rows($result_login)) {
 
@@ -46,7 +44,7 @@ function login($name, $password) {
 			mysql_query("UPDATE user SET logedin = true WHERE id = {$_SESSION['userid']}");
 
 			/* Neuen Action-Datensatz des Typs login einfügen */
-			insertLogin($_SESSION['userid'], $_SESSION['name']);
+			insertLogin($_SESSION['name']);
 
 			return 000;
 		}

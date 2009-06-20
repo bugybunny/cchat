@@ -9,8 +9,8 @@
 function logoutUser($userid, $username, $deleteSessionVariables) {
 	if(isset($userid) && isset($username)) {
 		mysql_query("UPDATE user SET logedin = false WHERE id = {$userid}");
-		$data_answer['message']['text'] =  mysql_error();
-		insertLogout($userid, $username);
+		trigger_error(mysql_error());
+		insertLogout($username);
 		if($deleteSessionVariables) {
 			unset($_SESSION['userid'], $_SESSION['name']);
 		}
@@ -26,11 +26,12 @@ function logoutUser($userid, $username, $deleteSessionVariables) {
 function checkForLogout($maxTime) {
 	date_default_timezone_set("Europe/Zurich");
 	$now = date("Y-m-d H:i:s", time() - $maxTime);
-
+	
 	/*
-	 * Da immer noch ein Logoutnachricht geschrieben werden muss, wenn sich ein User ausloggt, werden zuerst alle betroffenen user Datensätze geholt und nicht gleich mit UPDATE angepsasst.
+	 * Da immer noch eine Logoutnachricht geschrieben werden muss, wenn sich ein User ausloggt, werden zuerst alle betroffenen user Datensätze geholt und nicht gleich mit UPDATE angepasst.
 	 */
 	$usersToLogout = mysql_query("SELECT id, name FROM user WHERE logedin = TRUE AND lastrefresh < '{$now}'");
+	trigger_error(mysql_error());
 	while($user = mysql_fetch_assoc($usersToLogout)) {
 		logoutUser($user['id'], $user['name'], false);
 	}
