@@ -54,7 +54,6 @@ if(userIsLoggedin()) {
 if(isset($data['register'])) {
 	require 'register.php';
 	$data_answer['error'] = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
-	trigger_error("ERRORCODE nach Registrierung: {$data_answer['error']}");
 }
 
 /* Login:
@@ -62,7 +61,6 @@ if(isset($data['register'])) {
  */
 if(isset($data['login'])) {
 	$data_answer['error'] = login($data['login']['name'], $data['login']['password']);
-	trigger_error("ERRORCODE nach Login: {$data_answer['error']}");
 }
 
 /*
@@ -81,7 +79,6 @@ if(isset($data['messages'])) {
 		/* User nicht eingeloggt: Aktion fehlgeschlagen */
 		$data_answer['error'] = 101;
 	}
-	trigger_error("ERRORCODE nach Nachrichten: {$data_answer['error']}");
 }
 
 
