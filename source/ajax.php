@@ -33,14 +33,14 @@ mysql_select_db($mysql_db);
 
 /* Variablendeklaration */
 $data = json_decode($_POST['data'], true);
-/* Array, welches zurückgeschick wird an XXX.php/js*/
+/* Array, welches zurückgeschick wird an XXX.php/js */
 $data_answer = array();
 $errorcode = 000;
 
-/* Aktualisiert user.lastrefresh immer
+/* 
+ * Aktualisiert user.lastrefresh immer
  * Anhand von user.lastrefresh wird geprüft, ob der User seinen Browser geschlossen oder Verbindungsprobleme hat.
  * Der user wird automatisch ausgeloggt, sofern sich user.lastrefresh seit mehr als 30 Sekunden nicht mehr aktualisiert hat.
- *
  */
 if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
 	mysql_query("UPDATE user SET lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
@@ -55,9 +55,11 @@ if(isset($data['register'])) {
 /* Login:
  * Überprüfen und Errorcode setzen
  */
+echo "User hat sich probiert mit Name: {$data['login']['name']} und {$data['login']['password']} einzuloggen!\n";
 if(isset($data['login'])) {
 	require 'login.php';
 	$errorcode = login($data['login']['name'], $data['login']['password']);
+	echo "Errorcode: $errorcode!\n";
 	if($errorcode != 000) {
 		$data_answer['logedout'] = true;
 		$data_answer['error'] = $errorcode;
@@ -71,6 +73,8 @@ if(isset($data['login'])) {
  * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
  */
 if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
+	echo "Nachrichten!\n";
+	
 	require_once 'actions.php';
 	if(isset($data['messages'])) {
 		$errorcode = insertmessages($data, $_SESSION['userid']);
@@ -83,7 +87,11 @@ if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
 		$last = $data['last'];
 	}
 	$data_answer['messages'] = checkNewMessages($last);
-}
+} 
+/* else {
+	// User nicht eingeloggt: Aktion fehlgeschlagen 
+	$data_answer['error'] = 101;
+}*/
 
 /**
  * User die sich neu eingeloggt bzw. ausgeloggt haben in $data['user'] speichern
