@@ -2,22 +2,26 @@
 /**
  * Loggt den User mit $userid aus und zerstört die Session.
  *
- * @param	int	$userid	Userid des auszuloggenden Users
+ * @param	int		$userid					Userid des auszuloggenden Users
+ * @param	string	$username 				Username des auszuloggenden Users
+ * @param	boolean	$deleteSessionVariables	TRUE wenn die Session Variablen gelöscht werden sollen, ansonsten false
  */
-function logoutUser($userid, $username) {
+function logoutUser($userid, $username, $deleteSessionVariables) {
 	if(isset($userid) && isset($username)) {
 		require_once 'actions.php';
 		mysql_query("UPDATE user SET logedin = false WHERE id = {$userid}");
 		$data_answer['message']['text'] =  mysql_error();
 		insertLogout($userid, $username);
-		unset($_SESSION['userid'], $_SESSION['name']);
+		if($deleteSessionVariables) {
+			unset($_SESSION['userid'], $_SESSION['name']);
+		}
 	}
 }
 
 /**
  * Loggt alle nicht erreichbaren User automatisch ab $maxTime Sekunden aus.
  * Nicht erreichbare User bezeichnet User, die weder lesen noch schreiben und z.B. den Browser geschlossen haben
- * 
+ *
  * @param	int	$maxTime	Anzahl Sekunden, ab wann der User ausgeloggt werden soll
  */
 function checkForLogout($maxTime) {
@@ -29,6 +33,6 @@ function checkForLogout($maxTime) {
 	 */
 	$usersToLogout = mysql_query("SELECT id, name FROM user WHERE logedin = TRUE AND lastrefresh < '{$now}'");
 	while($user = mysql_fetch_assoc($usersToLogout)) {
-		logoutUser($user['id'], $user['name']);
+		logoutUser($user['id'], $user['name'], false);
 	}
 }

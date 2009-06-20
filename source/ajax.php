@@ -117,6 +117,7 @@ if(!isset($data['last'])) {
 } else {
 	$last = $data['last'];
 }
+
 require_once 'actions.php';
 $data_answer['user']['login']  = getNewUsers($last);
 $data_answer['user']['logout'] = getOldUsers($last);
