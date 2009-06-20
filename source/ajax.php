@@ -38,6 +38,8 @@ mysql_select_db($mysql_db);
 $data = json_decode($_POST['data'], true);
 /* Array, welches zurückgeschick wird */
 $data_answer = array();
+/* Fehlercode zum senden */
+$errorcode = 000;
 /* Falls letzte Aktualisierung nicht definiert ist, wird 0 angenommen */
 $data['last'] = isset($data['last']) ? $data['last'] : 0;
 
@@ -53,14 +55,14 @@ if(userIsLoggedin()) {
 /* Registrierung */
 if(isset($data['register'])) {
 	require 'register.php';
-	$data_answer['error'] = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
+	$errorcode = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
 }
 
 /* Login:
  * Überprüfen und Errorcode setzen
  */
 if(isset($data['login'])) {
-	$data_answer['error'] = login($data['login']['name'], $data['login']['password']);
+	$errorcode = login($data['login']['name'], $data['login']['password']);
 }
 
 /*
@@ -79,7 +81,7 @@ if(isset($data['messages'])) {
 		insertmessages($data, $_SESSION['userid']);
 	} else {
 		/* User nicht eingeloggt: Aktion fehlgeschlagen */
-		$data_answer['error'] = 101;
+		$errorcode = 101;
 	}
 }
 
@@ -93,6 +95,11 @@ checkForLogout(30);
  * Setzen, ob der User gerade eingeloggt ist
  */
 $data_answer['logedout'] = !userIsLoggedin();
+
+/* Falls ein Fehler aufgetreten ist, senden */
+if($errorcode != 000) {
+	$data_answer['error'] = $errorcode;
+}
 
 /*
  * User setzen, die sich neu ein- oder ausgeloggt haben, falls es welche gibt
