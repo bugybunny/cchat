@@ -87,7 +87,7 @@ function getUsersLogin($time) {
 		$query = mysql_query("SELECT name FROM user WHERE logedin = 1");
 		trigger_error(mysql_error());
 		while($action = mysql_fetch_assoc($query)) {
-			$users["login"] = $action['name'];
+			$users["login"][] = $action['name'];
 		}
 		return $users;
 	} else {
