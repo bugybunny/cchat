@@ -22,6 +22,7 @@
 // |		      http://code.google.com/p/cchat/wiki/Datenaustausch zu finden.					  |
 // |                                                                                              |
 // +----------------------------------------------------------------------------------------------+
+include 'error.php';
 require 'config.inc.php';
 require 'login.php';
 require 'logout.php';
@@ -31,8 +32,8 @@ session_start();
 header('Content-type: text/json; charset=utf-8');
 
 /* Datenbankverbindung herstellen */
-mysql_connect($mysql_server, $mysql_login, $mysql_pass);
-mysql_select_db($mysql_db);
+mysql_connect(MYSQL_SERVER, MYSQL_LOGIN, MYSQL_PASS);
+mysql_select_db(MYSQL_DB);
 
 /* Variablendeklaration und -initialisierung */
 $data = json_decode($_POST['data'], true);
@@ -50,6 +51,7 @@ $data['last'] = isset($data['last']) ? $data['last'] : 0;
  */
 if(userIsLoggedin()) {
 	mysql_query("UPDATE user SET lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
+	trigger_error(mysql_error());
 }
 
 /* Registrierung */
