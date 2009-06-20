@@ -2,7 +2,6 @@
 /**
  * Klasse um Datensätz in der action Datenbanktabelle zu erstellen oder verändern
  */
-require 'config.inc.php';
 
 /**
  * Prüft ob seit der letzten Anfrage eine neue Nachricht / neue Nachrichten geschrieben wurde
@@ -56,7 +55,7 @@ function insertmessages($data, $userid) {
  * @param int		$userid 	Optional: Userid des Users, der sich eingeloggt hat. Standardmässig auf 1 = User "System"
  * @param string	$username 	Name des Users, der sich eingeloggt hat
  */
-function insertLogin($userid = 1, $username) {
+function insertLogin($username, $userid = 1) {
 	$text = "User {$username} hat sich eingeloggt";
 	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGIN.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
 	trigger_error(mysql_error());
@@ -68,7 +67,7 @@ function insertLogin($userid = 1, $username) {
  * @param int		$userid 	Optional: Userid des Users, der sich ausgeloggt hat. Standardmässig auf 1 = User "System"
  * @param string	$username 	Name des Users, der sich ausgeloggt hat
  */
-function insertLogout($userid = 1, $username) {
+function insertLogout($username, $userid = 1) {
 	$text = "User {$username} hat sich ausgeloggt";
 	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGOUT.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
 	trigger_error(mysql_error());

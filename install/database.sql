@@ -72,7 +72,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'System','invalid','no login','cchat@localhost','1970-01-01 00:00:00',NULL,1,'1970-01-01 00:00:00');
+INSERT INTO `user` VALUES (1,'System','invalid','no login','cchat@localhost','1970-01-01 00:00:00',NULL,0,'1970-01-01 00:00:00');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
