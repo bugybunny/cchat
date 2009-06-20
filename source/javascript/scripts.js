@@ -12,6 +12,9 @@ document.addEvent("domready", function() {
 	login = new Login();
 	chat = new Chat();
 	
+	// leere Anfrage stellen, damit der Benutzer sofort eingeloggt wird, wenn er noch online ist
+	xhr.send({});
+	
 	// Default errors
 	xhr.addEvent("error", function(code) {
 		switch(code) {
