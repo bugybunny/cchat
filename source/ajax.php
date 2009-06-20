@@ -31,18 +31,21 @@ header('Content-type: text/json; charset=utf-8');
 mysql_connect($mysql_server, $mysql_login, $mysql_pass);
 mysql_select_db($mysql_db);
 
-/* Variablendeklaration */
+/* Variablendeklaration und -initialisierung */
 $data = json_decode($_POST['data'], true);
 /* Array, welches zurückgeschick wird an XXX.php/js */
 $data_answer = array();
 $errorcode = 000;
+$data_answer['logedout'] = true;
+
+require 'login.php';
 
 /*
  * Aktualisiert user.lastrefresh immer
  * Anhand von user.lastrefresh wird geprüft, ob der User seinen Browser geschlossen oder Verbindungsprobleme hat.
  * Der user wird automatisch ausgeloggt, sofern sich user.lastrefresh seit mehr als 30 Sekunden nicht mehr aktualisiert hat.
  */
-if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
+if(userIsLoggedin()) {
 	mysql_query("UPDATE user SET lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
 }
 
@@ -50,26 +53,25 @@ if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
 if(isset($data['register'])) {
 	require 'register.php';
 	$data_answer['error'] = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
+
+	if(userIsLoggedin()) {
+		$data_answer['logedout'] = false;
+	}
+
+	echo "ERRORCODE nach Registrierung: {$data_answer['error']}";
 }
 
 /* Login:
  * Überprüfen und Errorcode setzen
  */
-
-/* $bla = array();
- $bla['sender'] = "debug";
- $bla['message'] = "User hat sich probiert mit Name: {$data['login']['name']} und {$data['login']['password']} einzuloggen!\n";
- $bla['time'] = 0; */
-
-
 if(isset($data['login'])) {
-	require 'login.php';
-	$errorcode = login($data['login']['name'], $data['login']['password']);
-	$data_answer['debug'] = "Errorcode: $errorcode!\n";
-	if($errorcode != 000) {
-		$data_answer['logedout'] = true;
-		$data_answer['error'] = $errorcode;
+	$data_answer['error'] = login($data['login']['name'], $data['login']['password']);
+
+	if(userIsLoggedin()) {
+		$data_answer['logedout'] = false;
 	}
+
+	echo "ERRORCODE nach Login: {$data_answer['error']}\n";
 }
 
 /*
@@ -78,29 +80,25 @@ if(isset($data['login'])) {
  * Abfrage, zurückkgeschickt.
  * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
  */
-if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
-	$bla = array();
-	$bla['sender'] = "debug";
-	$bla['message'] = "Nachrichten!\n";
-	$bla['time'] = 0;
-
+if(isset($data['messages'])) {
 	require_once 'actions.php';
-	if(isset($data['messages'])) {
+	if(userIsLoggedin()) {
 		$errorcode = insertmessages($data, $_SESSION['userid']);
 		$data_answer['error'] = $errorcode;
-	}
-	/* Wenn $data['last'] nicht gesetzt ist, werden alle Nachrichten aus der DB geholt */
-	if(!isset($data['last'])) {
-		$last = 0;
+		/* Wenn $data['last'] nicht gesetzt ist, werden alle Nachrichten aus der DB geholt */
+		if(!isset($data['last'])) {
+			$last = 0;
+		} else {
+			$last = $data['last'];
+		}
+		$data_answer['messages'] = checkNewMessages($last);
 	} else {
-		$last = $data['last'];
+		/* User nicht eingeloggt: Aktion fehlgeschlagen */
+		$data_answer['error'] = 101;
 	}
-	$data_answer['messages'] = checkNewMessages($last);
+
+	echo "ERRORCODE nach Nachrichten: {$data_answer['error']}\n";
 }
-/* else {
- // User nicht eingeloggt: Aktion fehlgeschlagen
- $data_answer['error'] = 101;
- }*/
 
 
 /*
@@ -121,7 +119,6 @@ if(!isset($data['last'])) {
 require_once 'actions.php';
 $data_answer['user']['login']  = getNewUsers($last);
 $data_answer['user']['logout'] = getOldUsers($last);
-
 
 /* Antwort an XXX.php/js zurückschicken */
 echo json_encode($data_answer);

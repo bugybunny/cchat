@@ -26,13 +26,7 @@ function register($name, $password, $mail) {
 			/* User automatisch einloggen nach der Registrierung */
 			require 'login.php';
 			login($name_register, $password);
-
-			/* if(!empty(mysql_error())) {
-				$bla = array();
-				$bla['sender'] = "debug";
-				$bla['message'] = mysql_error();
-				$bla['time'] = 0;
-			} */
+			return 000;
 		}
 		/* Errorcode: Benutzer bereits vorhanden */
 		else {
