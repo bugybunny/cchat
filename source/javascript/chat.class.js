@@ -38,7 +38,6 @@ var Chat = new Class({
 					'password': ''
 				}
 			});
-			xhr.fireEvent('logout', {});
 		});
 		
 		xhr.addEvent('login', this.login.bind(this));
