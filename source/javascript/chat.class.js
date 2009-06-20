@@ -35,18 +35,38 @@ var Chat = new Class({
 	},
 	
 	addMessage: function(message) {
-			var container = new Element('div');
-			var sender = new Element('span', {
-				'text': message.sender + ': ',
-				'class': 'messagesender'
-			});
-			var text = new Element('span', {
-				'text': message.message,
-				'class': 'messagetext'
-			});
-			container.grab(sender);
-			container.grab(text);
-			$('chatmessages').grab(container);
+		var container = new Element('div', {
+			'title': this.getMessageTime(message)
+		});
+		var sender = new Element('span', {
+			'text': message.sender + ': ',
+			'class': 'messagesender'
+		});
+		var text = new Element('span', {
+			'text': message.message,
+			'class': 'messagetext'
+		});
+		container.grab(sender);
+		container.grab(text);
+		$('chatmessages').grab(container);
+	},
+	
+	getMessageTime: function(message) {
+		var date = new Date();
+		var messageTime = Math.floor(message.time);
+		date.setTime(messageTime);
+		var hour = date.getHours();
+			hour = (hour < 10) ? '0' + hour : hour;
+		var minute = date.getMinutes();
+			minute = (minute < 10) ? '0' + minute : minute;
+		var second = date.getSeconds();
+			second = (second < 10) ? '0' + second : second;
+		var day = date.getDay();
+			day = (day < 10) ? '0' + day : day;
+		var month = date.getMonth() + 1;
+			month = (month < 10) ? '0' + month : month;
+		var year = date.getFullYear();
+		return hour + ':' + minute + ':' + second + ', ' + day + '.' + month + '.' + year;
 	},
 	
 	userlogin: function(user) {
