@@ -17,7 +17,7 @@ function login($name, $password) {
 	$name_login = mysql_real_escape_string($name);
 	$result_login = mysql_query("SELECT id, salt FROM user WHERE name = '$name_login'");
 
-	echo "Der User mit dem Namen $name und $passwort will sich einloggen\n";
+	echo "Der User mit dem Namen $name und $password will sich einloggen\n";
 
 	/* User wurde gefunden */
 	if(mysql_num_rows($result_login)) {
@@ -59,12 +59,13 @@ function login($name, $password) {
 	}
 	/* Errorcode: Es wurde kein User mit dem eingegeben Namen gefunden */
 	else {
-		if($name == "logout" && empty($password) && userIsLoggedin()) {
+		if(userIsLoggedin()) {
 			require_once 'logout.php';
 			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
+		}
+		if($name == "logout" && empty($password)) {
+			return 000;
 		} else {
-			require_once 'logout.php';
-			logoutUser($_SESSION['userid'], $_SESSION['name'], true);
 			return 201;
 		}
 	}
