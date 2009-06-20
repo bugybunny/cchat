@@ -16,8 +16,14 @@ function login($name, $password) {
 	/* Username und Passwort überprüfen */
 	$name_login = mysql_real_escape_string($name);
 	$result_login = mysql_query("SELECT id, salt FROM user WHERE name = '$name_login'");
-	
-	echo "SESSION-Variablen momentan: {$_SESSION['name']} und {$_SESSION['userid']}\n";
+
+
+	$bla = array();
+	$bla['sender'] = "debug";
+	$bla['message'] = "SESSION-Variablen momentan: {$_SESSION['name']} und {$_SESSION['userid']}\n";
+	$bla['time'] = 0; 
+
+
 	
 	/* User wurde gefunden */
 	if(mysql_num_rows($result_login)) {
@@ -26,7 +32,7 @@ function login($name, $password) {
 		 * Sofern momentan ein User eingeloggt ist, wird er zuerst ausgeloggt. Damit ist es nicht möglich,
 		 * dass ein User bei mehreren Leuten gleichzeitig eingeloggt ist.
 		 */
-		if(isset($_SESSION['userid']) && isset($_SESSION['name'])) {		
+		if(isset($_SESSION['userid']) && isset($_SESSION['name'])) {
 			require 'logout.php';
 			logoutUser($_SESSION['userid'], $_SESSION['name']);
 		}
@@ -35,22 +41,32 @@ function login($name, $password) {
 		$user = mysql_fetch_assoc($result_login);
 		$password_login = hash("sha256", $user['salt'] . hash("sha256", $user['salt'] . $password));
 		$result_login = mysql_query("SELECT id FROM user WHERE id = '{$user['id']}' AND password = '$password_login'");
-		echo mysql_error();
 		
 		/* Passwortüberprüfung */
 		if(mysql_num_rows($result_login)) {
 			require_once 'actions.php';
-			
-			echo "Der User mit dem Namen wurde gefunden!!\n";
+
+
+			$bla = array();
+			$bla['sender'] = "debug";
+			$bla['message'] = "Der User mit dem Namen wurde gefunden!!\n";
+			$bla['time'] = 0;
+
+
 
 			/* Username und UserID des aktuell eingeloggten Users */
 			$_SESSION['name'] = $name;
 			$_SESSION['userid'] = $user['id'];
-			echo "SESSION Variablen wurden neu gesetzt: {$_SESSION['name']} und {$_SESSION['userid']}\n";
+
+
+			$bla = array();
+			$bla['sender'] = "debug";
+			$bla['message'] = "SESSION Variablen wurden neu gesetzt: {$_SESSION['name']} und {$_SESSION['userid']}\n";
+			$bla['time'] = 0;
+
 
 			/* Userstatus auf logedin setzen */
 			mysql_query("UPDATE user SET logedin = true WHERE id = {$_SESSION['userid']}");
-			echo mysql_error();
 			
 			/* Neuen Action-Datensatz des Typs login einfügen */
 			insertLogin($_SESSION['userid'], $_SESSION['name']);
@@ -65,17 +81,20 @@ function login($name, $password) {
 	/* Errorcode: Es wurde kein User mit dem eingegeben Namen gefunden */
 	else {
 		if($name == "logout" && empty($password) && isset($_SESSION['userid']) && isset($_SESSION['name'])) {
-			echo "Username blieb leer, username war LOGOUT! SESSION USERID ist {$_SESSION['userid']}\n";
+			$data_answer['message']['text'] =  "Username blieb leer, username war LOGOUT! SESSION USERID ist {$_SESSION['userid']}\n";
 			require_once 'logout.php';
 			logoutUser($_SESSION['userid'], $_SESSION['name']);
 		} else if(!empty($name) && isset($_SESSION['userid']) && isset($_SESSION['name'])) {
-			echo "User nicht gefunden!\n";
+
+
+			$bla = array();
+			$bla['sender'] = "debug";
+			$bla['message'] = "User nicht gefunden!\n";
+			$bla['time'] = 0;
 
 			require_once 'logout.php';
 			logoutUser($_SESSION['userid'], $_SESSION['name']);
 			return 201;
-		} else {
-			echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 		}
 	}
 }
