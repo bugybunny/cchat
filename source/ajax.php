@@ -68,7 +68,9 @@ if(isset($data['login'])) {
  * Immer wenn eine Anfrage kommt (ajax.php aufgerufen wird) und der User eingeloggt ist, werden die neuen Nachrichten in der Datenbank, seit der letzten
  * Abfrage, zurückkgeschickt.
  */
-$data_answer['messages'] = checkNewMessages($data["last"]);
+if(userIsLoggedin()) {
+	$data_answer['messages'] = checkNewMessages($data['last']);
+}
 /*
  * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
  */
@@ -95,9 +97,11 @@ $data_answer['logedout'] = !userIsLoggedin();
 /*
  * User setzen, die sich neu ein- oder ausgeloggt haben, falls es welche gibt
  */
-$users = getUsersLogin($data["last"]);
-if(count($users["login"]) != 0 || count($users["logout"]) != 0)
-	$data_answer['user'] = $users;
+$users = getUsersLogin($data['last']);
+if(count($users['login']) != 0)
+	$data_answer['user']['login'] = $users['login'];
+if(count($users['logout']) != 0)
+	$data_answer['user']['logout'] = $users['logout'];
 
 /* Antwort als JSON zurückschicken */
 echo json_encode($data_answer);
