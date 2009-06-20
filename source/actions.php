@@ -14,7 +14,7 @@ function insertmessages($data, $userid) {
 	if(isset($userid)) {
 		foreach($data['messages'] as $message) {
 			$message = mysql_real_escape_string($message);
-			mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_MESSAGE.", '{$message}', {$userid}, ".floor(microtime(true) * 1000).")");
+			mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_MESSAGE.", '{$message}', {$userid}, ".floor(microtime(true) / 1000).")");
 		}
 	}
 	/* Aktuell ist kein User eingeloggt. Deshalb können keine Nachrichten verschickt werden */
@@ -51,7 +51,7 @@ function checkNewMessages($time) {
  */
 function insertLogin($userid, $username) {
 	$text = "User {$username} hat sich eingeloggt";
-	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGIN.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
+	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGIN.", '{$text}', {$userid}, ".floor(microtime(true) / 1000).")");
 }
 
 /**
@@ -62,7 +62,7 @@ function insertLogin($userid, $username) {
  */
 function insertLogout($userid, $username) {
 	$text = "User {$username} hat sich ausgeloggt";
-	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGOUT.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
+	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGOUT.", '{$text}', {$userid}, ".floor(microtime(true) / 1000).")");
 	$data_answer['message']['text'] =  mysql_error();
 }
 
