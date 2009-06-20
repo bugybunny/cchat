@@ -29,7 +29,7 @@ SET character_set_client = utf8;
 CREATE TABLE `action` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `typ` int(10) unsigned NOT NULL,
-  `text` varchar(256) DEFAULT NULL,
+  `text` varchar(512) DEFAULT NULL,
   `userid` int(10) unsigned NOT NULL,
   `time` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`)
