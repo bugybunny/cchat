@@ -2,10 +2,10 @@
 /**
  * Neuer Benutzer mit Passwort in der Datenbank anlegen
  * ÜberprÜfen ob alle Felder ausgefüllt sind. Wird in der Eingabemaske schon geprüft, da die Daten können
- * jedoch verändert werden können, wird es hier nochmals überprüft 
+ * jedoch verändert werden können, wird es hier nochmals überprüft
  * @param string	$name 		Username
  * @param string	$password	Passwort des Users
- * @param string	$mail 		E-Mail des Users 
+ * @param string	$mail 		E-Mail des Users
  * @return int					Errorcode: Beschreibung der Codes unter http://code.google.com/p/cchat/wiki/Datenaustausch
  */
 function register($name, $password, $mail) {
@@ -21,13 +21,19 @@ function register($name, $password, $mail) {
 			$salt = rand(1, PHP_INT_MAX) . "cchatisttoll" . rand(1, PHP_INT_MAX);
 			$password_register = hash("sha256", $salt . hash("sha256", $salt . $password));
 			mysql_query("INSERT INTO user (name, password, salt, mail, register, logedin, lastrefresh) VALUES ('$name_register', '$password_register', '$salt', '$email_register', now(), true, now())");
-			echo mysql_error();
-			
+			$data_answer['message']['text'] =  mysql_error();
+				
 			/* User automatisch einloggen nach der Registrierung */
 			require 'login.php';
 			login($name_register, $password);
-			echo mysql_error();
-		} 
+
+			/* if(!empty(mysql_error())) {
+				$bla = array();
+				$bla['sender'] = "debug";
+				$bla['message'] = mysql_error();
+				$bla['time'] = 0;
+			} */
+		}
 		/* Errorcode: Benutzer bereits vorhanden */
 		else {
 			return 301;

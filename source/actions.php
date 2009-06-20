@@ -15,7 +15,6 @@ function insertmessages($data, $userid) {
 		foreach($data['messages'] as $message) {
 			$message = mysql_real_escape_string($message);
 			mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_MESSAGE.", '{$message}', {$userid}, ".floor(microtime(true) * 1000).")");
-			echo mysql_error();
 		}
 	}
 	/* Aktuell ist kein User eingeloggt. Deshalb können keine Nachrichten verschickt werden */
@@ -35,8 +34,6 @@ function insertmessages($data, $userid) {
 function checkNewMessages($time) {
 	$newMessages = array();
 	$result_message = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = ".CODE_MESSAGE." AND a.time > {$time} AND a.userid = u.id");
-	echo mysql_error();
-
 	while($action = mysql_fetch_assoc($result_message)) {
 		$message['sender']  = $action['name'];
 		$message['message'] = $action['text'];
@@ -55,7 +52,6 @@ function checkNewMessages($time) {
 function insertLogin($userid, $username) {
 	$text = "User {$username} hat sich eingeloggt";
 	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGIN.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
-	echo mysql_error();
 }
 
 /**
@@ -67,7 +63,7 @@ function insertLogin($userid, $username) {
 function insertLogout($userid, $username) {
 	$text = "User {$username} hat sich ausgeloggt";
 	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGOUT.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
-	echo mysql_error();
+	$data_answer['message']['text'] =  mysql_error();
 }
 
 /**
@@ -79,8 +75,8 @@ function insertLogout($userid, $username) {
 function getNewUsers($time) {
 	$newUsers = array();
 	$result_login = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = ".CODE_LOGIN." AND a.time > {$time} AND a.userid = u.id");
-	echo mysql_error();
-	
+	$data_answer['message']['text'] =  mysql_error();
+
 	while($action = mysql_fetch_assoc($result_login)) {
 		$newUsers[] = $action['name'];
 	}
@@ -96,7 +92,7 @@ function getNewUsers($time) {
 function getOldUsers($time) {
 	$oldUsers = array();
 	$result_logout = mysql_query("SELECT u.name, a.text, a.time FROM action a, user u WHERE a.typ = ".CODE_LOGOUT." AND a.time > {$time} AND a.userid = u.id");
-	echo mysql_error();
+	$data_answer['message']['text'] =  mysql_error();
 	while($action = mysql_fetch_assoc($result_logout)) {
 		$oldUsers[] = $action['name'];
 	}

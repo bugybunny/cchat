@@ -37,7 +37,7 @@ $data = json_decode($_POST['data'], true);
 $data_answer = array();
 $errorcode = 000;
 
-/* 
+/*
  * Aktualisiert user.lastrefresh immer
  * Anhand von user.lastrefresh wird geprüft, ob der User seinen Browser geschlossen oder Verbindungsprobleme hat.
  * Der user wird automatisch ausgeloggt, sofern sich user.lastrefresh seit mehr als 30 Sekunden nicht mehr aktualisiert hat.
@@ -55,11 +55,17 @@ if(isset($data['register'])) {
 /* Login:
  * Überprüfen und Errorcode setzen
  */
-echo "User hat sich probiert mit Name: {$data['login']['name']} und {$data['login']['password']} einzuloggen!\n";
+
+/* $bla = array();
+ $bla['sender'] = "debug";
+ $bla['message'] = "User hat sich probiert mit Name: {$data['login']['name']} und {$data['login']['password']} einzuloggen!\n";
+ $bla['time'] = 0; */
+
+
 if(isset($data['login'])) {
 	require 'login.php';
 	$errorcode = login($data['login']['name'], $data['login']['password']);
-	echo "Errorcode: $errorcode!\n";
+	$data_answer['debug'] = "Errorcode: $errorcode!\n";
 	if($errorcode != 000) {
 		$data_answer['logedout'] = true;
 		$data_answer['error'] = $errorcode;
@@ -73,8 +79,11 @@ if(isset($data['login'])) {
  * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
  */
 if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
-	echo "Nachrichten!\n";
-	
+	$bla = array();
+	$bla['sender'] = "debug";
+	$bla['message'] = "Nachrichten!\n";
+	$bla['time'] = 0;
+
 	require_once 'actions.php';
 	if(isset($data['messages'])) {
 		$errorcode = insertmessages($data, $_SESSION['userid']);
@@ -87,13 +96,20 @@ if(isset($_SESSION['name']) && isset($_SESSION['userid'])) {
 		$last = $data['last'];
 	}
 	$data_answer['messages'] = checkNewMessages($last);
-} 
+}
 /* else {
-	// User nicht eingeloggt: Aktion fehlgeschlagen 
-	$data_answer['error'] = 101;
-}*/
+ // User nicht eingeloggt: Aktion fehlgeschlagen
+ $data_answer['error'] = 101;
+ }*/
 
-/**
+
+/*
+ * Alle user, die seit 30 Sekunden nicht mehr erreichbar sind, ausloggen
+ */
+require_once 'logout.php';
+checkForLogout(30);
+
+/*
  * User die sich neu eingeloggt bzw. ausgeloggt haben in $data['user'] speichern
  */
 if(!isset($data['last'])) {
@@ -104,12 +120,6 @@ if(!isset($data['last'])) {
 require_once 'actions.php';
 $data_answer['user']['login']  = getNewUsers($last);
 $data_answer['user']['logout'] = getOldUsers($last);
-
-/**
- * Alle user, die seit 30 Sekunden nicht mehr erreichbar sind, ausloggen
- */
-require_once 'logout.php';
-checkForLogout();
 
 
 /* Antwort an XXX.php/js zurückschicken */
