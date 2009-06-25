@@ -156,12 +156,13 @@ var Chat = new Class({
 	},
 	
 	/**
-	 * Ruft regelmässig die Refresh-Methode auf
+	 * Ruft regelmässig die Refresh-Methode auf und leert die Userliste
 	 * @see Chat.refresh()
 	 */
 	login: function() {
 		this.refreshIntervall = this.refresh.periodical(100, this);
 		this.checkOverflow.delay(100);
+		$("chatuserlist").empty();
 	},
 	/**
 	 * Entfernt das regelmässige Aufrufen der Refresh-Methode
