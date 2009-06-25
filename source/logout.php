@@ -23,8 +23,8 @@ function logoutUser($userid, $username, $deleteSessionVariables) {
  *
  * @param	int	$maxTime	Anzahl Sekunden, ab wann der User ausgeloggt werden soll
  */
-function checkForLogout($maxTime) {
-	date_default_timezone_set("Europe/Zurich");
+function checkForLogout($maxTime) {	
+	date_default_timezone_set(TIMEZONE);
 	$now = date("Y-m-d H:i:s", time() - $maxTime);
 	
 	/*

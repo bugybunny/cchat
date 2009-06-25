@@ -45,16 +45,6 @@ $errorcode = 000;
 /* Falls letzte Aktualisierung nicht definiert ist, wird 0 angenommen */
 $data['last'] = isset($data['last']) ? $data['last'] : 0;
 
-/*
- * Aktualisiert user.lastrefresh immer
- * Anhand von user.lastrefresh wird geprüft, ob der User seinen Browser geschlossen oder Verbindungsprobleme hat.
- * Der user wird automatisch ausgeloggt, sofern sich user.lastrefresh seit mehr als 30 Sekunden nicht mehr aktualisiert hat.
- */
-if(userIsLoggedin()) {
-	mysql_query("UPDATE user SET lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
-	trigger_error(mysql_error());
-}
-
 /* Registrierung */
 if(isset($data['register'])) {
 	require 'register.php';
@@ -69,15 +59,20 @@ if(isset($data['login'])) {
 }
 
 /*
- * Nachrichten:
- * Immer wenn eine Anfrage kommt (ajax.php aufgerufen wird) und der User eingeloggt ist, werden die neuen Nachrichten in der Datenbank, seit der letzten
- * Abfrage, zurückkgeschickt.
+ * Aktualisiert user.lastrefresh immer
+ * Anhand von user.lastrefresh wird geprüft, ob der User seinen Browser geschlossen oder Verbindungsprobleme hat.
+ * Der user wird automatisch ausgeloggt, sofern sich user.lastrefresh seit mehr als 30 Sekunden nicht mehr aktualisiert hat.
  */
 if(userIsLoggedin()) {
-	$messages = checkNewMessages($data['last']);
-	if(count($messages) > 0) {
-		$data_answer['messages'] = $messages;
-	}
+	mysql_query("UPDATE user SET lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
+	trigger_error(mysql_error());
+
+	/*
+	 * Nachrichten:
+	 * Immer wenn eine Anfrage kommt (ajax.php aufgerufen wird) und der User eingeloggt ist, werden die neuen Nachrichten in der Datenbank, seit der letzten
+	 * Abfrage, zurückkgeschickt.
+	 */
+	$data_answer['messages'] = checkNewMessages($data['last']);
 }
 /*
  * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
@@ -114,9 +109,9 @@ if($errorcode != 000) {
  */
 $users = getUsersLogin($data['last']);
 if(count($users['login']) != 0)
-	$data_answer['user']['login'] = $users['login'];
+$data_answer['user']['login'] = $users['login'];
 if(count($users['logout']) != 0)
-	$data_answer['user']['logout'] = $users['logout'];
+$data_answer['user']['logout'] = $users['logout'];
 
 /* Antwort als JSON zurückschicken */
 echo json_encode($data_answer);
