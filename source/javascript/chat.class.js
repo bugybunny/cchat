@@ -162,12 +162,12 @@ var Chat = new Class({
 	login: function() {
 		this.refreshIntervall = this.refresh.periodical(100, this);
 		this.checkOverflow.delay(100);
-		$("chatuserlist").empty();
 	},
 	/**
 	 * Entfernt das regelmässige Aufrufen der Refresh-Methode
 	 */
 	logout: function() {
 		$clear(this.refreshIntervall);
+		$("chatuserlist").empty();
 	}
 });
