@@ -76,6 +76,9 @@ var Login = new Class({
 			case 301:
 				alert("Benutzername ist bereits vergeben. Bitte einen anderen wählen.");
 				break;
+			case 302:
+				alert("Mailadresse hat ein ungültiges Format.");
+				break;
 		}
 	},
 	
