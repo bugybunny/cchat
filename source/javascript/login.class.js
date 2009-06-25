@@ -79,6 +79,9 @@ var Login = new Class({
 			case 302:
 				alert("Mailadresse hat ein ungültiges Format.");
 				break;
+			case 303:
+				alert("Bitte fülle alle Felder aus.");
+				break;
 		}
 	},
 	
