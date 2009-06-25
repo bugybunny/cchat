@@ -12,14 +12,16 @@
  * 			Die Arraystruktur ist unter Answer beschrieben: http://code.google.com/p/cchat/wiki/Datenaustausch
  */
 function checkNewMessages($time) {
+		
 	$newMessages = array();
 	$querystring = "SELECT u.name, a.text, a.time FROM action a, user u WHERE a.time > {$time} AND a.userid = u.id";
 	
 	/* Errormeldungen nicht anzeigen, wenn $displayErrorMessages in config.inc.php auf FALSE ist */ 
 	if(!DISPLAY_ERROR_MESSAGES) {
-		$querystring .= "AND a.typ <> ".CODE_ERROR;
+		$querystring .= " AND a.typ <> ".CODE_ERROR;
 	}
 	$querystring .= " ORDER BY a.time DESC LIMIT 30";
+	
 	$result_message = mysql_query($querystring);
 	trigger_error(mysql_error());
 	while($action = mysql_fetch_assoc($result_message)) {
@@ -95,14 +97,14 @@ function getUsersLogin($time) {
 		trigger_error(mysql_error());
 		while($action = mysql_fetch_assoc($query)) {
 			$user = $action["name"];
-			if($action["type"] == CODE_LOGIN) {
-				$position = array_search($name, $users["logout"]);
+			if(CODE_LOGIN == CODE_LOGIN) {
+				$position = array_search($user, $users["logout"]);
 				if($position !== false) {
 					unset($users["logout"][$position]);
 				}
 				$users["login"][] = $user;
 			} else {
-				$position = array_search($name, $users["login"]);
+				$position = array_search($user, $users["login"]);
 				if($position !== false) {
 					unset($users["login"][$position]);
 				}

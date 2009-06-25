@@ -16,4 +16,5 @@
 	define('ERROR_LOGGING', E_ALL | E_STRICT);
 	// loggt nur Fatale Fehler
 	#define('ERROR_LOGGING', E_ERROR);
-?>
+	
+	define('TIMEZONE', "Europe/Zurich");

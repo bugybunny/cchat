@@ -31,8 +31,9 @@ function login($name, $password) {
 		/* Passwort mit Verschlüsselung überprüfen */
 		$user = mysql_fetch_assoc($result_login);
 		$password_login = hash("sha256", $user['salt'] . hash("sha256", $user['salt'] . $password));
+		
 		$result_login = mysql_query("SELECT id FROM user WHERE id = '{$user['id']}' AND password = '$password_login'");
-
+		
 		/* Passwortüberprüfung */
 		if(mysql_num_rows($result_login)) {
 
