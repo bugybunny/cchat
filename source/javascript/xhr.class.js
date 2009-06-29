@@ -12,32 +12,13 @@ var XHR = new Class({
 	 * @type Boolean
 	 */
 	logedin: false,
-	/**
-	 * Ob gerade eine Server-Anfrage läuft
-	 * @type Boolean
-	 */
-	isRunning: false,
 	
 	/**
 	 * Initialisiert die Klasse und fügt die Ereignisse hinzu
 	 * @constructor
 	 */
 	initialize: function() {
-		this.request = new Request.JSON({
-			'url': 'ajax.php',
-			'link': 'chain'
-		});
-		this.request.addEvent('success', function(response) {
-			this.isRunning = false;
-			this.messages(response);
-			this.user(response);
-			this.login(response);
-			this.error(response);
-		}.bind(this));
-		this.request.addEvent('failure', function() {
-			this.isRunning = false;
-			this.error({'error': 400});
-		}.bind(this));
+		this.request = this.getRequest();
 	},
 	
 	/**
@@ -93,7 +74,33 @@ var XHR = new Class({
 	 */
 	send: function(data) {
 		data = JSON.encode(data);
-		this.isRunning = true;
-		this.request.send({'data': {'data': data}});
+		this.getRequest().send({'data': {'data': data}});
+	},
+	
+	/**
+	 * Gibt ein Request-Objekt zurück
+	 * falls es existiert und nicht bereits eine Anfrage stellt, ist dies die Standard-Request this.request,
+	 * ansonsten ein neu erstelltes.
+	 * @return Request.JSON
+	 */
+	getRequest: function() {
+		if(this.request && !this.request.running) {
+			return this.request;
+		} else {
+			var request = new Request.JSON({
+				'url': 'ajax.php',
+				'link': 'chain'
+			});
+			request.addEvent('success', function(response) {
+				this.messages(response);
+				this.user(response);
+				this.login(response);
+				this.error(response);
+			}.bind(this));
+			request.addEvent('failure', function() {
+				this.error({'error': 400});
+			}.bind(this));
+			return request;
+		}
 	}
 });

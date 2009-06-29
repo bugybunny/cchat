@@ -20,6 +20,11 @@ var Chat = new Class({
 	 * @type Array
 	 */
 	userlist: {},
+	/**
+	 * Speichert alle empfangenen Nachrichtenelemente mit ihrer Uhrzeit als Schlüssel
+	 * @type Object
+	 */
+	messageElements: {},
 	
 	/**
 	 * Initialisiert die Chat-Funktionalitäten und fügt die Sende- und Empfangs-Ereignisse hinzu
@@ -54,10 +59,14 @@ var Chat = new Class({
 	 */
 	messages: function(messages) {
 		messages.each(function(message) {
-			if(this.lastrefresh < message.time)
-				this.lastrefresh = message.time;
-			this.addMessage(message);
-			this.checkOverflow();
+			if(!this.messageElements[message.time] ||
+				(this.messageElements[message.time].getChildren()[0].get('text') == message.sender &&
+				 this.messageElements[message.time].getChildren()[1].get('text') == message.message)) {
+					if(this.lastrefresh < message.time)
+						this.lastrefresh = message.time;
+					this.addMessage(message);
+					this.checkOverflow();
+			}
 		}, this);
 	},
 	
@@ -79,6 +88,7 @@ var Chat = new Class({
 		});
 		container.grab(sender);
 		container.grab(text);
+		this.messageElements[message.time] = container;
 		$('chatmessages').grab(container);
 	},
 	
@@ -146,14 +156,12 @@ var Chat = new Class({
 	 * Lädt neue Nachrichten vom Server und sendet neu geschriebene mit
 	 */
 	refresh: function() {
-		if(!xhr.isRunning) {
-			xhr.send({
-				'messages': this.queue,
-				'last': this.lastrefresh
-			});
-			this.queue.empty();
-		}
-	},
+		xhr.send({
+			'messages': this.queue,
+			'last': this.lastrefresh
+		});
+		this.queue.empty();
+},
 	
 	/**
 	 * Ruft regelmässig die Refresh-Methode auf
@@ -168,6 +176,8 @@ var Chat = new Class({
 	 */
 	logout: function() {
 		$clear(this.refreshIntervall);
+		this.messageElements = {};
+		$("chatmessages").empty();
 		$("chatuserlist").empty();
 	}
 });
