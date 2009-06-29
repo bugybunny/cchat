@@ -178,6 +178,7 @@ var Chat = new Class({
 		$clear(this.refreshIntervall);
 		this.messageElements = {};
 		$("chatmessages").empty();
+		this.userlist = {};
 		$("chatuserlist").empty();
 	}
 });
