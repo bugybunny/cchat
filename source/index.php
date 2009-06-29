@@ -44,7 +44,7 @@ echo "
 			</div>
 			<form id='chatform' action='' method='post'>
 				<p>
-					<input id='chattext' type='text' name='text' size='100'>
+					<input id='chattext' type='text' name='text' size='100' autocomplete='off'>
 					<input type='submit' value='Go'>
 					<input id='chatlogout' type='button' name='logout' value='Logout'>
 				</p>
