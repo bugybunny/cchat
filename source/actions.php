@@ -14,7 +14,7 @@
 function checkNewMessages($time) {
 		
 	$newMessages = array();
-	$querystring = "SELECT u.name, a.text, a.time FROM action a, user u WHERE a.time > {$time} AND a.userid = u.id";
+	$querystring = "SELECT u.name, a.text, a.time, a.typ FROM action a, user u WHERE a.time > {$time} AND a.userid = u.id";
 	
 	/* Errormeldungen nicht anzeigen, wenn $displayErrorMessages in config.inc.php auf FALSE ist */ 
 	if(!DISPLAY_ERROR_MESSAGES) {
@@ -25,7 +25,11 @@ function checkNewMessages($time) {
 	$result_message = mysql_query($querystring);
 	trigger_error(mysql_error());
 	while($action = mysql_fetch_assoc($result_message)) {
-		$message['sender']  = $action['name'];
+		if($action['typ'] == CODE_LOGIN || $action['typ'] == CODE_LOGOUT) {
+			$message['sender'] = "System";
+		} else {
+			$message['sender']  = $action['name'];
+		}
 		$message['message'] = $action['text'];
 		$message['time'] 	= $action['time'];
 		$newMessages[] 		= $message;
@@ -54,10 +58,10 @@ function insertmessages($data, $userid) {
 /**
  * Fügt einen neuen Actiondatensatz des Typs login in die Datenbank ein
  *
- * @param int		$userid 	Optional: Userid des Users, der sich eingeloggt hat. Standardmässig auf 1 = User "System"
+ * @param int		$userid 	Optional: Userid des Users, der sich eingeloggt hat.
  * @param string	$username 	Name des Users, der sich eingeloggt hat
  */
-function insertLogin($username, $userid = 1) {
+function insertLogin($username, $userid) {
 	$text = "User {$username} hat sich eingeloggt";
 	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGIN.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
 	trigger_error(mysql_error());
@@ -66,10 +70,10 @@ function insertLogin($username, $userid = 1) {
 /**
  * Fügt einen neuen Actiondatensatz des Typs logout in die Datenbank ein
  *
- * @param int		$userid 	Optional: Userid des Users, der sich ausgeloggt hat. Standardmässig auf 1 = User "System"
+ * @param int		$userid 	Optional: Userid des Users, der sich ausgeloggt hat.
  * @param string	$username 	Name des Users, der sich ausgeloggt hat
  */
-function insertLogout($username, $userid = 1) {
+function insertLogout($username, $userid) {
 	$text = "User {$username} hat sich ausgeloggt";
 	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGOUT.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
 	trigger_error(mysql_error());

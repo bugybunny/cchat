@@ -45,7 +45,7 @@ function login($name, $password) {
 			mysql_query("UPDATE user SET logedin = true WHERE id = {$_SESSION['userid']}");
 
 			/* Neuen Action-Datensatz des Typs login einfügen */
-			insertLogin($_SESSION['name']);
+			insertLogin($_SESSION['name'], $_SESSION['userid']);
 
 			return 000;
 		}
