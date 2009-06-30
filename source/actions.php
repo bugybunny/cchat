@@ -85,30 +85,30 @@ function insertLogout($username, $userid) {
  */
 function getUsersLogin($time) {
 	$users = array();
-	$users["login"] = array();
-	$users["logout"] = array();
+	$users['login'] = array();
+	$users['logout'] = array();
 	if($time == 0) {
 		$query = mysql_query("SELECT name FROM ".DB_PREFIX."user WHERE logedin = 1") or trigger_error(mysql_error(), E_USER_ERROR);
 		while($action = mysql_fetch_assoc($query)) {
-			$users["login"][] = $action['name'];
+			$users['login'][] = $action['name'];
 		}
 		return $users;
 	} else {
 		$query = mysql_query("SELECT u.name, a.typ FROM ".DB_PREFIX."action a, ".DB_PREFIX."user u WHERE (a.typ = ".CODE_LOGIN." OR a.typ = ".CODE_LOGOUT.") AND a.time > {$time} AND a.userid = u.id ORDER BY a.time DESC") or trigger_error(mysql_error(), E_USER_ERROR);
 		while($action = mysql_fetch_assoc($query)) {
-			$user = $action["name"];
-			if(CODE_LOGIN == CODE_LOGIN) {
-				$position = array_search($user, $users["logout"]);
+			$user = $action['name'];
+			if($action['typ'] == CODE_LOGIN) {
+				$position = array_search($user, $users['logout']);
 				if($position !== false) {
-					unset($users["logout"][$position]);
+					unset($users['logout'][$position]);
 				}
-				$users["login"][] = $user;
+				$users['login'][] = $user;
 			} else {
-				$position = array_search($user, $users["login"]);
+				$position = array_search($user, $users['login']);
 				if($position !== false) {
-					unset($users["login"][$position]);
+					unset($users['login'][$position]);
 				}
-				$users["logout"][] = $user;
+				$users['logout'][] = $user;
 			}
 		}
 		return $users;
