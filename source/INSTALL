@@ -1,0 +1,8 @@
+=== CCHAT 1.0 ===
+
+Zur Installation Einstellungen in
+sample_config.inc.php treffen und die
+Datei in config.inc.php umbenennen.
+SQL-Script aus database.sql in der
+Datenbank ausführen. Der Chat ist nun
+Betriebsbereit!

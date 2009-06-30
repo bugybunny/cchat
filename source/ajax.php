@@ -4,7 +4,7 @@
 // | Dateiname     ajax.php																		  |
 // | Plattform     PHP 5.1 / Apache 2.0															  |
 // |																							  |
-// | Autor         Marco Syfrig																	  |
+// | Autor         Marco Syfrig, Jannis Grimm													  |
 // | Datum         2009-04-30																	  |
 // |																							  |
 // | Beschreibung  Erhält von index.php ein JSON dekodiertes Array $data per POST, wertet es	  |
@@ -23,9 +23,9 @@
 // |																							  |
 // +----------------------------------------------------------------------------------------------+
 require 'config.inc.php';
-require 'login.php';
-require 'logout.php';
-require 'actions.php';
+require 'php/login.php';
+require 'php/logout.php';
+require 'php/actions.php';
 
 session_start();
 header('Content-type: text/json; charset=utf-8');
@@ -34,7 +34,7 @@ header('Content-type: text/json; charset=utf-8');
 mysql_connect(MYSQL_SERVER, MYSQL_LOGIN, MYSQL_PASS);
 mysql_select_db(MYSQL_DB);
 
-include 'error.php';
+include 'php/error.php';
 
 /* Variablendeklaration und -initialisierung */
 $data = json_decode($_POST['data'], true);
@@ -47,7 +47,7 @@ $data['last'] = isset($data['last']) ? $data['last'] : 0;
 
 /* Registrierung */
 if(isset($data['register'])) {
-	require 'register.php';
+	require 'php/register.php';
 	$errorcode = register($data['register']['name'], $data['register']['password'], $data['register']['email']);
 }
 
