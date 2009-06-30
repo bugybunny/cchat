@@ -1,5 +1,11 @@
 <?php
 /**
+ * Überprüfen korrekter Registrierungsdaten
+ * 
+ * @author Marco Syfrig
+ */
+
+/**
  * Neuer Benutzer mit Passwort in der Datenbank anlegen
  * ÜberprÜfen ob alle Felder ausgefüllt sind. Wird in der Eingabemaske schon geprüft, da die Daten können
  * jedoch verändert werden können, wird es hier nochmals überprüft

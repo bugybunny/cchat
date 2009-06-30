@@ -1,5 +1,11 @@
 <?php
 /**
+ * Überprüfung der Logins 
+ * 
+ * @author Marco Syfrig
+ */
+
+/**
  * Loggt zuerst den aktuell eingeloggten User aus.
  *
  * Überprüft ob ein User mit dem Namen $user und dem Passwort $password existiert

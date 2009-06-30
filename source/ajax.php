@@ -1,26 +1,26 @@
 <?php
 // +----------------------------------------------------------------------------------------------+
-// | Projekt       cchat                                                                          |
-// | Dateiname     ajax.php                                                                       |
-// | Plattform     PHP 5.1 / Apache 2.0                                                           |
-// |                                                                                              |
-// | Autor         Marco Syfrig (syfm)                                                            |
-// | Datum         2009-04-30                                                                     |
-// |                                                                                              |
-// | Beschreibung  Erhält von index.php ein JSON dekodiertes Array $data per POST, wertet es      |
+// | Projekt       cchat																		  |
+// | Dateiname     ajax.php																		  |
+// | Plattform     PHP 5.1 / Apache 2.0															  |
+// |																							  |
+// | Autor         Marco Syfrig																	  |
+// | Datum         2009-04-30																	  |
+// |																							  |
+// | Beschreibung  Erhält von index.php ein JSON dekodiertes Array $data per POST, wertet es	  |
 // |               aus und gibt ein Array $data_answer zurück									  |
-// |               Diese Datei und die hier aufgerufenen Funktionen machen Folgendes:		 	  |
-// |				 - user.lastrefresh (=DB-Feld) aktualisieren und den User automatisch         |
+// |               Diese Datei und die hier aufgerufenen Funktionen machen Folgendes:			  |
+// |				 - user.lastrefresh (=DB-Feld) aktualisieren und den User automatisch		  |
 // |				   ausloggen, wenn er nicht mehr erreichbar ist								  |
 // |                 - Die neuen Nachrichten werden in die Datenbank geschrieben				  |
 // |				 - Vom Benutzer noch ungelesene Nachrichten werden in $data_answer gespeichert|
 // |                 - Login überprüfen (Name und Passwort) und den Userstatus auf eingeloggt	  |
 // |			 	   setzen, sofern das Login stimmt											  |
 // |				 - Neuen user Datensatz bei einer Registrierung in der Datenbank anlegen	  |
-// | 																							  |
-// |			  Die Beschreibung von $data, $data_answer und den Errorcodes ist unter 		  |
+// |																					 		  |
+// |			  Die Beschreibung von $data, $data_answer und den Errorcodes ist unter			  |
 // |		      http://code.google.com/p/cchat/wiki/Datenaustausch zu finden.					  |
-// |                                                                                              |
+// |																							  |
 // +----------------------------------------------------------------------------------------------+
 require 'config.inc.php';
 require 'login.php';

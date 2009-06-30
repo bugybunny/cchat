@@ -1,5 +1,11 @@
 <?php
 /**
+ * Ausloggen von User
+ * 
+ * @author Marco Syfrig
+ */
+
+/**
  * Loggt den User mit $userid aus und zerstört die Session.
  *
  * @param	int		$userid					Userid des auszuloggenden Users
