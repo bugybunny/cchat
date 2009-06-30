@@ -11,6 +11,7 @@ function logoutUser($userid, $username, $deleteSessionVariables) {
 		mysql_query("UPDATE user SET logedin = false WHERE id = {$userid}");
 		trigger_error(mysql_error());
 		insertLogout($username, $userid);
+		
 		if($deleteSessionVariables) {
 			unset($_SESSION['userid'], $_SESSION['name']);
 		}

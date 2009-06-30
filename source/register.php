@@ -12,14 +12,14 @@ function register($name, $password, $mail) {
 	if(!empty($name) && !empty($password) && !empty($mail)) {
 
 		/* Prüfung ob die Emailadresse gültig ist */
-		if(preg_match("/^(?:[a-zA-Z0-9_'^&amp;\/+-])+(?:\.(?:[a-zA-Z0-9_'^&amp;\/+-])+)*@(?:(?:\[?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\.){3}(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\]?)|(?:[a-zA-Z0-9-]+\.)+(?:[a-zA-Z]){2,}\.?)$/", $mail) > 0) {
+		if(preg_match("/^(?:[a-zA-Z0-9_'^&\/+-])+(?:\.(?:[a-zA-Z0-9_'^&\/+-])+)*@(?:(?:\[?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\.){3}(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\]?)|(?:[a-zA-Z0-9-]+\.)+(?:[a-zA-Z]){2,}\.?)$/", $mail) > 0) {
 			
 			
 			$name_register = mysql_real_escape_string($name);
 			$email_register = mysql_real_escape_string($mail);
 			$result_register = mysql_query("SELECT name FROM user WHERE name = '$name_register'");
 			/*
-			 * Der Username existiert noch nicht, deshalb liefert die MySQL-Abfrage kein Ergebnis.
+			 * Der Username existiert noch nicht, deshalb liefert die MySQL-Abfrage kein Ergebnis. 
 			 * Der Account kann erstellt werden
 			 */
 			if(!mysql_num_rows($result_register)) {
