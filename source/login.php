@@ -21,7 +21,7 @@
 function login($name, $password) {
 	/* Username und Passwort überprüfen */
 	$name_login = mysql_real_escape_string($name);
-	$result_login = mysql_query("SELECT id, salt FROM user WHERE name = '$name_login'");
+	$result_login = mysql_query("SELECT id, salt FROM ".DB_PREFIX."user WHERE name = '$name_login'") or trigger_error(mysql_error(), E_USER_ERROR);
 
 	/* User wurde gefunden */
 	if(mysql_num_rows($result_login)) {
@@ -38,7 +38,7 @@ function login($name, $password) {
 		$user = mysql_fetch_assoc($result_login);
 		$password_login = hash("sha256", $user['salt'] . hash("sha256", $user['salt'] . $password));
 		
-		$result_login = mysql_query("SELECT id FROM user WHERE id = '{$user['id']}' AND password = '$password_login'");
+		$result_login = mysql_query("SELECT id FROM ".DB_PREFIX."user WHERE id = '{$user['id']}' AND password = '$password_login'") or trigger_error(mysql_error(), E_USER_ERROR);
 		
 		/* Passwortüberprüfung */
 		if(mysql_num_rows($result_login)) {
@@ -48,7 +48,7 @@ function login($name, $password) {
 			$_SESSION['userid'] = $user['id'];
 
 			/* Userstatus auf logedin setzen */
-			mysql_query("UPDATE user SET logedin = true WHERE id = {$_SESSION['userid']}");
+			mysql_query("UPDATE ".DB_PREFIX."user SET logedin = true WHERE id = {$_SESSION['userid']}") or trigger_error(mysql_error(), E_USER_ERROR);
 
 			/* Neuen Action-Datensatz des Typs login einfügen */
 			insertLogin($_SESSION['name'], $_SESSION['userid']);

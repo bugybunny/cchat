@@ -15,7 +15,7 @@
  */
 function checkNewMessages($time) {
 	$newMessages = array();
-	$querystring = "SELECT u.name, a.text, a.time, a.typ FROM action a, user u WHERE a.time > {$time} AND a.userid = u.id";
+	$querystring = "SELECT u.name, a.text, a.time, a.typ FROM ".DB_PREFIX."action a, ".DB_PREFIX."user u WHERE a.time > {$time} AND a.userid = u.id";
 	
 	/* Errormeldungen nicht anzeigen, wenn $displayErrorMessages in config.inc.php auf FALSE ist */ 
 	if(!DISPLAY_ERROR_MESSAGES) {
@@ -23,8 +23,7 @@ function checkNewMessages($time) {
 	}
 	$querystring .= " ORDER BY a.time DESC LIMIT 30";
 	
-	$result_message = mysql_query($querystring);
-	trigger_error(mysql_error());
+	$result_message = mysql_query($querystring) or trigger_error(mysql_error(), E_USER_ERROR);
 	while($action = mysql_fetch_assoc($result_message)) {
 		if($action['typ'] == CODE_LOGIN || $action['typ'] == CODE_LOGOUT) {
 			$message['sender'] = "System";
@@ -46,12 +45,12 @@ function insertmessages($data, $userid) {
 	if(userIsLoggedin()) {
 		foreach($data['messages'] as $message) {
 			$message = mysql_real_escape_string($message);
-			mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_MESSAGE.", '{$message}', {$userid}, ".floor(microtime(true) * 1000).")");
+			mysql_query("INSERT INTO ".DB_PREFIX."action (typ, text, userid, time) VALUES (".CODE_MESSAGE.", '{$message}', {$userid}, ".floor(microtime(true) * 1000).")") or trigger_error(mysql_error(), E_USER_ERROR);
 		}
 		// Nachrichten, die älter als die letzten 30 sind, löschen
-		$old = mysql_query("SELECT id FROM action ORDER BY time DESC LIMIT 30, 99999999");
+		$old = mysql_query("SELECT id FROM ".DB_PREFIX."action ORDER BY time DESC LIMIT 30, 99999999") or trigger_error(mysql_error(), E_USER_ERROR);
 		while($message = mysql_fetch_assoc($old)) {
-			mysql_query("DELETE FROM action WHERE id = $message[id] LIMIT 1");
+			mysql_query("DELETE FROM ".DB_PREFIX."action WHERE id = $message[id] LIMIT 1") or trigger_error(mysql_error(), E_USER_ERROR);
 		}
 	}
 }
@@ -64,8 +63,7 @@ function insertmessages($data, $userid) {
  */
 function insertLogin($username, $userid) {
 	$text = "User {$username} hat sich eingeloggt";
-	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGIN.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
-	trigger_error(mysql_error());
+	mysql_query("INSERT INTO ".DB_PREFIX."action (typ, text, userid, time) VALUES (".CODE_LOGIN.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")") or trigger_error(mysql_error(), E_USER_ERROR);
 }
 
 /**
@@ -76,8 +74,7 @@ function insertLogin($username, $userid) {
  */
 function insertLogout($username, $userid) {
 	$text = "User {$username} hat sich ausgeloggt";
-	mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_LOGOUT.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")");
-	trigger_error(mysql_error());
+	mysql_query("INSERT INTO ".DB_PREFIX."action (typ, text, userid, time) VALUES (".CODE_LOGOUT.", '{$text}', {$userid}, ".floor(microtime(true) * 1000).")") or trigger_error(mysql_error(), E_USER_ERROR);
 }
 
 /**
@@ -91,15 +88,13 @@ function getUsersLogin($time) {
 	$users["login"] = array();
 	$users["logout"] = array();
 	if($time == 0) {
-		$query = mysql_query("SELECT name FROM user WHERE logedin = 1");
-		trigger_error(mysql_error());
+		$query = mysql_query("SELECT name FROM ".DB_PREFIX."user WHERE logedin = 1") or trigger_error(mysql_error(), E_USER_ERROR);
 		while($action = mysql_fetch_assoc($query)) {
 			$users["login"][] = $action['name'];
 		}
 		return $users;
 	} else {
-		$query = mysql_query("SELECT u.name, a.typ FROM action a, user u WHERE (a.typ = ".CODE_LOGIN." OR a.typ = ".CODE_LOGOUT.") AND a.time > {$time} AND a.userid = u.id ORDER BY a.time DESC");
-		trigger_error(mysql_error());
+		$query = mysql_query("SELECT u.name, a.typ FROM ".DB_PREFIX."action a, ".DB_PREFIX."user u WHERE (a.typ = ".CODE_LOGIN." OR a.typ = ".CODE_LOGOUT.") AND a.time > {$time} AND a.userid = u.id ORDER BY a.time DESC") or trigger_error(mysql_error(), E_USER_ERROR);
 		while($action = mysql_fetch_assoc($query)) {
 			$user = $action["name"];
 			if(CODE_LOGIN == CODE_LOGIN) {

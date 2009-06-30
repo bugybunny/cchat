@@ -3,6 +3,8 @@
 	define('MYSQL_LOGIN', "root");
 	define('MYSQL_PASS', "gibbiX12345");
 	define('MYSQL_DB', "cchat");
+	define('DB_PREFIX', "cchat_");
+	
 	
 	define('CCHAT_VERSION', "1.0 dev");
 	
