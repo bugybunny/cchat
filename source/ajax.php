@@ -64,14 +64,18 @@ if(isset($data['login'])) {
  * Der user wird automatisch ausgeloggt, sofern sich user.lastrefresh seit mehr als 30 Sekunden nicht mehr aktualisiert hat.
  */
 if(userIsLoggedin()) {
-	mysql_query("UPDATE ".DB_PREFIX."user SET lastrefresh = now() WHERE id = {$_SESSION['userid']}") or trigger_error(mysql_error(), E_USER_ERROR);
+	mysql_query("UPDATE user SET lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
+	trigger_error(mysql_error());
 
 	/*
 	 * Nachrichten:
 	 * Immer wenn eine Anfrage kommt (ajax.php aufgerufen wird) und der User eingeloggt ist, werden die neuen Nachrichten in der Datenbank, seit der letzten
 	 * Abfrage, zurückkgeschickt.
 	 */
-	$data_answer['messages'] = checkNewMessages($data['last']);
+	$messages = checkNewMessages($data['last']);
+	if(count($messages)) {
+		$data_answer['messages'] = checkNewMessages($data['last']);
+	}
 }
 /*
  * Wenn zusätzlich neue Nachrichten vom User geschrieben wurden, werden sie in die Datenbank geschrieben.
@@ -107,10 +111,12 @@ if($errorcode != 000) {
  * User setzen, die sich neu ein- oder ausgeloggt haben, falls es welche gibt
  */
 $users = getUsersLogin($data['last']);
-if(count($users['login']) != 0)
-$data_answer['user']['login'] = $users['login'];
-if(count($users['logout']) != 0)
-$data_answer['user']['logout'] = $users['logout'];
+if(count($users['login'])) {
+	$data_answer['user']['login'] = $users['login'];
+}
+if(count($users['logout'])) {
+	$data_answer['user']['logout'] = $users['logout'];
+}
 
 /* Antwort als JSON zurückschicken */
 echo json_encode($data_answer);
