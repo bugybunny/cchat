@@ -64,8 +64,7 @@ if(isset($data['login'])) {
  * Der user wird automatisch ausgeloggt, sofern sich user.lastrefresh seit mehr als 30 Sekunden nicht mehr aktualisiert hat.
  */
 if(userIsLoggedin()) {
-	mysql_query("UPDATE user SET lastrefresh = now() WHERE user.id = {$_SESSION['userid']}");
-	trigger_error(mysql_error());
+	mysql_query("UPDATE ".DB_PREFIX."user SET lastrefresh = now() WHERE id = {$_SESSION['userid']}") or trigger_error(mysql_error(), E_USER_ERROR);
 
 	/*
 	 * Nachrichten:

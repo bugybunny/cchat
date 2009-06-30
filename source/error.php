@@ -31,7 +31,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
 			$errormessage = "Fehler $errno: '$errstr' in $errfile auf Zeile $errline";
 			$errormessage = mysql_real_escape_string($errormessage);
 			/* Userid 1 = User "System", der die Ein- und Auslogg- und Fehlernachrichten ausgibt */
-			mysql_query("INSERT INTO action (typ, text, userid, time) VALUES (".CODE_ERROR.", '{$errormessage}', 1, ".floor(microtime(true) * 1000).")");
+			mysql_query("INSERT INTO ".DB_PREFIX."action (typ, text, userid, time) VALUES (".CODE_ERROR.", '{$errormessage}', 1, ".floor(microtime(true) * 1000).")");
 			echo mysql_error();
 			return true;
 		}

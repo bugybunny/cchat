@@ -14,8 +14,7 @@
  */
 function logoutUser($userid, $username, $deleteSessionVariables) {
 	if(isset($userid) && isset($username)) {
-		mysql_query("UPDATE user SET logedin = false WHERE id = {$userid}");
-		trigger_error(mysql_error());
+		mysql_query("UPDATE ".DB_PREFIX."user SET logedin = false WHERE id = {$userid}") or trigger_error(mysql_error(), E_USER_ERROR);
 		insertLogout($username, $userid);
 		
 		if($deleteSessionVariables) {
@@ -37,8 +36,7 @@ function checkForLogout($maxTime) {
 	/*
 	 * Da immer noch eine Logoutnachricht geschrieben werden muss, wenn sich ein User ausloggt, werden zuerst alle betroffenen user Datensätze geholt und nicht gleich mit UPDATE angepasst.
 	 */
-	$usersToLogout = mysql_query("SELECT id, name FROM user WHERE logedin = TRUE AND lastrefresh < '{$now}'");
-	trigger_error(mysql_error());
+	$usersToLogout = mysql_query("SELECT id, name FROM ".DB_PREFIX."user WHERE logedin = TRUE AND lastrefresh < '{$now}'") or trigger_error(mysql_error(), E_USER_ERROR);
 	while($user = mysql_fetch_assoc($usersToLogout)) {
 		logoutUser($user['id'], $user['name'], false);
 	}
