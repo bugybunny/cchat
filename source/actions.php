@@ -1,6 +1,8 @@
 <?php
 /**
- * Klasse um Datensätz in der action Datenbanktabelle zu erstellen oder verändern
+ * Verwaltung (erstellen, ändern, löschen) der Datensätze in der action Datenbanktabelle
+ * 
+ * @author Marco Syfrig
  */
 
 /**
@@ -12,7 +14,6 @@
  * 			Die Arraystruktur ist unter Answer beschrieben: http://code.google.com/p/cchat/wiki/Datenaustausch
  */
 function checkNewMessages($time) {
-		
 	$newMessages = array();
 	$querystring = "SELECT u.name, a.text, a.time, a.typ FROM action a, user u WHERE a.time > {$time} AND a.userid = u.id";
 	
