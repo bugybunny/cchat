@@ -1,7 +1,7 @@
 <?php
 	define('MYSQL_SERVER', "localhost");
 	define('MYSQL_LOGIN', "root");
-	define('MYSQL_PASS', "gibbiX12345");
+	define('MYSQL_PASS', "");
 	define('MYSQL_DB', "cchat");
 	define('DB_PREFIX', "cchat_");
 	
@@ -14,7 +14,7 @@
 	define('CODE_ERROR', 40);
 	
 	// Geloggte Fehlermeldungen im Chat anzeigen
-	define('DISPLAY_ERROR_MESSAGES', true);
+	define('DISPLAY_ERROR_MESSAGES', false);
 	// loggt alle Fehler, Warnungen und Anmerkungen
 	define('ERROR_LOGGING', E_ALL | E_STRICT);
 	// loggt nur Fatale Fehler

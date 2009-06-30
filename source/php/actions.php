@@ -79,7 +79,9 @@ function insertLogout($username, $userid) {
 
 /**
  * Gibt ein Array zurück. Eines mit Usernamen, die sich seit $time eingeloggt haben, und eines mit Usernamen, die sich seither ausgeloggt haben.
- *
+ * 
+ * @author Jannis <jannis@gmx.ch>
+ * 
  * @param	long	$time		Zeitpunkt der letzten Anfrage in Millisekunden
  * @return  array				Array mit den neu ein- und ausgeloggten Usern
  */
