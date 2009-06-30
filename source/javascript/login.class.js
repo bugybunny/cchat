@@ -88,10 +88,14 @@ var Login = new Class({
 	/**
 	 * Blendet die Login-Seite aus und zeigt die Chat-Seite an
 	 * Wird ausgeführt, wenn der Benutzer eingeloggt wurde
+	 * Schliesst die Registrierungs-Felder, damit der Benutzer nach dem Logout wieder den Login angezeigt bekommt
 	 */
 	logedin: function() {
 		$("login").setStyle("display", "none");
 		$("chat").setStyle("display", "block");
+		if(this.isRegister) {
+			this.toggle();
+		}
 	},
 	
 	/**
