@@ -3,6 +3,23 @@
 Zur Installation Einstellungen in
 sample_config.inc.php treffen und die
 Datei in config.inc.php umbenennen.
-SQL-Script aus database.sql in der
+SQL-Script aus install.sql in der
 Datenbank ausführen. Der Chat ist nun
-Betriebsbereit!
+betriebsbereit!
+
+Einstellungs-Parameter zur Änderung:
+- MYSQL_SERVER: MySQL-Server (meist localhost)
+- MYSQL_LOGIN: Datenbank-Benutzer
+- MYSQL_PASS: Datenbank-Passwort
+- MYSQL_DB: Datenbank-Name
+- DB_PREFIX: Tabellen-Präfix in der Datenbank
+
+- TIMEZONE: Zu nutzende Zeitzone
+
+- DISPLAY_ERROR_MESSAGES: Ob geloggte Fehler
+  im Chat angezeigt werden sollen
+- ERROR_LOGIN: Welche PHP-Fehlertypen in die
+  Datenbank geloggt werden sollen.
+
+Alle weiteren Konstanten werden intern
+verwendet und sind nicht zur Änderung vorgesehen.
