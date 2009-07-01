@@ -12,7 +12,7 @@ echo "
 <!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
 <html>
 <head>
-	<meta http-equiv='Content-Type' content='text/html; charset=UFT-8'>
+	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
 	<title>cchat ".CCHAT_VERSION."</title>
 	<link rel='stylesheet' type='text/css' href='css/style.css'>
 	<script type='text/javascript' src='javascript/mootools-core.js'></script>
