@@ -4,7 +4,7 @@
  * @author Jannis <jannis@gmx.ch>
  */
 
-include "config.inc.php";
+include "php/constants.php";
 include "php/error.php";
 header('Content-type: text/html; charset=utf-8');
 

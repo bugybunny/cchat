@@ -22,13 +22,15 @@
 // |		      http://code.google.com/p/cchat/wiki/Datenaustausch zu finden.					  |
 // |																							  |
 // +----------------------------------------------------------------------------------------------+
-require 'config.inc.php';
-require 'php/login.php';
-require 'php/logout.php';
-require 'php/actions.php';
 
 session_start();
 header('Content-type: text/json; charset=utf-8');
+
+require 'config.inc.php';
+require 'php/constants.php';
+require 'php/login.php';
+require 'php/logout.php';
+require 'php/actions.php';
 
 /* Datenbankverbindung herstellen */
 mysql_connect(MYSQL_SERVER, MYSQL_LOGIN, MYSQL_PASS);
