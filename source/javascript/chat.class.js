@@ -147,7 +147,7 @@ var Chat = new Class({
 	 */
 	checkOverflow: function() {
 		var container = $('chatmessages');
-		while(container.getChildren('div').length && container.getSize().y < container.getScrollSize().y) {
+		while(container.getSize().y > 0 && container.getSize().y < container.getScrollSize().y) {
 			container.getChildren(':first-child')[0].destroy();
 		}
 	},
