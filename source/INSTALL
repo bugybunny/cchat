@@ -20,6 +20,3 @@ Einstellungs-Parameter zur Änderung:
   im Chat angezeigt werden sollen
 - ERROR_LOGIN: Welche PHP-Fehlertypen in die
   Datenbank geloggt werden sollen.
-
-Alle weiteren Konstanten werden intern
-verwendet und sind nicht zur Änderung vorgesehen.
