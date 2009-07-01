@@ -15,15 +15,12 @@ document.addEvent("domready", function() {
 	// leere Anfrage stellen, damit der Benutzer sofort eingeloggt wird, wenn er noch online ist
 	xhr.send({});
 	
-	// Default errors
-	xhr.addEvent("error", function(code) {
-		switch(code) {
-			case 400:
-				alert("Keine Verbindung zum Chat / Netzwerkstörung...");
-				break;
-			case 500:
-				alert("Es ist ein unbekannter Serverfehler aufgetreten...");
-				break;
+	xhr.addEvent('failure', function(fails) {
+		if(fails == 100) {
+			alert('Konnte Chat seit 10 Sekunden nicht mehr erreichen... Bitte prüfe deine Internet-Verbindung.');
+		} else if(fails == 300) {
+			xhr.fireEvent('logout', {'error': 400, 'logedout': true});
+			alert('Konnte leider keine Verbindung mehr seit 30 Sekunden herstellen... Du wurdest darum automatisch ausgeloggt.');
 		}
 	});
 });

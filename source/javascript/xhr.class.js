@@ -12,6 +12,11 @@ var XHR = new Class({
 	 * @type Boolean
 	 */
 	logedin: false,
+	/**
+	 * Zähler für die fehlgeschlagenen Requests
+	 * @type Number
+	 */
+	failurecounter: 0,
 	
 	/**
 	 * Initialisiert die Klasse und fügt die Ereignisse hinzu
@@ -67,6 +72,25 @@ var XHR = new Class({
 			this.fireEvent("error"+response.error, response);
 		}
 	},
+	
+	/**
+	 * Zählt die Anzahl fehlgeschlagener Versuche und führt pro 100 ein entsprechendes Event aus
+	 * @param Boolean failed Ob die Anfrage fehlgeschlagen ist
+	 */
+	failure: function(failed) {
+		if(failed) {
+			this.error({'error': 400});
+			this.failurecounter++;
+			if(this.failurecounter % 100 == 0) {
+				this.fireEvent("failure", this.failurecounter);
+				this.fireEvent("failure"+this.failurecounter);
+			}
+		} else if(this.failurecounter > 0) {
+			this.failurecounter = 0;
+			this.fireEvent("failure", 0);
+			this.fireEvent("failure0");
+		}
+	},
 
 	/**
 	 * Sendet eine Anfrage an den Server
@@ -92,13 +116,14 @@ var XHR = new Class({
 				'link': 'chain'
 			});
 			request.addEvent('success', function(response) {
+				this.failure(false);
 				this.messages(response);
 				this.user(response);
 				this.login(response);
 				this.error(response);
 			}.bind(this));
 			request.addEvent('failure', function() {
-				this.error({'error': 400});
+				this.failure(true);
 			}.bind(this));
 			return request;
 		}
