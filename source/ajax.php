@@ -60,6 +60,18 @@ if(isset($data['login'])) {
 }
 
 /*
+ * Prüfen, ob der Benutzer noch angemeldet ist
+ * evtl. hat er sich unterdessen an einem anderen Computer ausgeloggt und es liegen noch "Session-Leichen" da..
+ */
+if(userIsLoggedin()) {
+	$offline = mysql_query("SELECT id FROM ".DB_PREFIX."user WHERE logedin = false AND id = {$_SESSION['userid']}") or trigger_error(mysql_error(), E_USER_ERROR);
+	if(mysql_num_rows($offline)) {
+		// User ist nicht mehr online
+		unset($_SESSION['userid'], $_SESSION['name']);
+	}
+}
+
+/*
  * Aktualisiert user.lastrefresh immer
  * Anhand von user.lastrefresh wird geprüft, ob der User seinen Browser geschlossen oder Verbindungsprobleme hat.
  * Der user wird automatisch ausgeloggt, sofern sich user.lastrefresh seit mehr als 30 Sekunden nicht mehr aktualisiert hat.
