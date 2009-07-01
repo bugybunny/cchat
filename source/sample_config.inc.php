@@ -18,7 +18,7 @@
 	
 	
 	### DO NOT CHANGE ###
-	define('CCHAT_VERSION', "1.0 RC");
+	define('CCHAT_VERSION', "1.0 RC2 dev");
 	define('CODE_MESSAGE', 10);
 	define('CODE_LOGIN', 20);
 	define('CODE_LOGOUT', 30);

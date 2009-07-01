@@ -37,7 +37,8 @@ mysql_select_db(MYSQL_DB);
 include 'php/error.php';
 
 /* Variablendeklaration und -initialisierung */
-$data = json_decode($_POST['data'], true);
+$data = get_magic_quotes_gpc() ? stripslashes($_POST['data']) : $_POST['data'];
+$data = json_decode(utf8_encode($data), true);
 /* Array, welches zurückgeschick wird */
 $data_answer = array();
 /* Fehlercode zum senden */
