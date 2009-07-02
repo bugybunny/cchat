@@ -1,5 +1,5 @@
 <?php
-	define('CCHAT_VERSION', "1.0 RC3");
+	define('CCHAT_VERSION', "1.0");
 	define('CODE_MESSAGE', 10);
 	define('CODE_LOGIN', 20);
 	define('CODE_LOGOUT', 30);
