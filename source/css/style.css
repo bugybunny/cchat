@@ -1,13 +1,14 @@
 @CHARSET "UTF-8";
 
-#page, #chat {
-	display: none;
-}
-
 #login {
 	text-align: right;
 	margin-right: 50%;
 	margin-top: 30%;
+        display: none;
+}
+
+#chat {
+	display: none;
 }
 
 #register {
