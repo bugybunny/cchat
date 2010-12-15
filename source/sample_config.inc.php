@@ -9,7 +9,7 @@
 	// Zeitzone
 	define('TIMEZONE', "Europe/Zurich");
 	
-	// Fehler-Login
+	// Fehler-Logging
 	define('DISPLAY_ERROR_MESSAGES', false);
 	# loggt alle Fehler, Warnungen und Anmerkungen:
 	define('ERROR_LOGGING', E_ALL | E_STRICT);

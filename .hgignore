@@ -1,0 +1,5 @@
+^source/config\.inc\.php$
+^\.cache/
+^\.project$
+^\.settings/
+^nbproject/
